@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RequestObject",
+  "description": "Cross-agency data request created by an analyst and submitted to the SSC for a warrant token.",
+  "type": "object",
+  "required": ["case_id", "predicate", "subjects", "fields", "justification"],
+  "properties": {
+    "case_id": { "type": "string", "description": "Initiating agency's internal case ID" },
+    "predicate": {
+      "type": "string",
+      "enum": [
+        "foreign_state_espionage",
+        "terrorism",
+        "cyber_state_actor",
+        "proliferation",
+        "critical_infrastructure_attack"
+      ]
+    },
+    "subjects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "maxItems": 50,
+      "description": "Minimized subject identifiers; wildcard entries are rejected by the specificity test"
+    },
+    "fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Requested data fields"
+    },
+    "justification": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Operational justification for the cross-agency access"
+    }
+  }
+}

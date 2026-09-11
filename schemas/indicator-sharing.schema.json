@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IndicatorSharing",
+  "description": "STIX/TAXII-compatible technical indicator sharing between intelligence agencies and DNSC under the standing MOU (flows T7/T8).",
+  "type": "object",
+  "required": ["flow", "indicators", "mou_reference", "contains_personal_data"],
+  "properties": {
+    "flow": { "enum": ["T7", "T8"] },
+    "indicators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "value"],
+        "properties": {
+          "type": { "enum": ["ip", "hash", "domain", "ttp", "malware_family"] },
+          "value": { "type": "string" }
+        }
+      },
+      "minItems": 1
+    },
+    "mou_reference": { "type": "string", "description": "Standing MOU identifier" },
+    "contains_personal_data": {
+      "type": "boolean",
+      "description": "Must be false unless an SSC warrant covers the transfer"
+    },
+    "anspdpc_notification_id": {
+      "type": ["string", "null"],
+      "description": "Required whenever personal data is transferred"
+    }
+  }
+}

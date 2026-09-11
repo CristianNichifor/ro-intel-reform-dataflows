@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WarrantToken",
+  "type": "object",
+  "required": [
+    "token_id",
+    "case_id",
+    "issuing_court",
+    "predicate",
+    "subjects",
+    "time_window",
+    "receiving_agency",
+    "signature"
+  ],
+  "properties": {
+    "token_id": { "type": "string", "format": "uuid" },
+    "case_id": { "type": "string" },
+    "issuing_court": { "const": "SSC" },
+    "predicate": {
+      "type": "string",
+      "enum": [
+        "foreign_state_espionage",
+        "terrorism",
+        "cyber_state_actor",
+        "proliferation",
+        "critical_infrastructure_attack"
+      ]
+    },
+    "subjects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "maxItems": 50
+    },
+    "time_window": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      }
+    },
+    "receiving_agency": { "enum": ["SRI", "SIE", "DNSC", "DIICOT"] },
+    "signature": {
+      "type": "string",
+      "description": "Ed25519 signature over canonical JSON (demo uses HMAC-SHA-256)"
+    }
+  }
+}

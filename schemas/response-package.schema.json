@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResponsePackage",
+  "description": "Token-bound, minimized response returned by a source agency via the IADE broker.",
+  "type": "object",
+  "required": ["token_id", "case_id", "fields", "minimization_certificate", "provenance_hashes", "payload"],
+  "properties": {
+    "token_id": { "type": "string", "format": "uuid" },
+    "case_id": { "type": "string" },
+    "fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Field names included in the response"
+    },
+    "minimization_certificate": {
+      "type": "string",
+      "description": "Attestation that the minimization filter was applied"
+    },
+    "provenance_hashes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IADE audit ledger hashes proving data provenance"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Encrypted content; only metadata is visible to the broker"
+    }
+  }
+}
