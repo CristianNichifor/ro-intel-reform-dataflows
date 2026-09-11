@@ -74,6 +74,15 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
   const boxRef = useRef<HTMLDivElement>(null)
   const hostRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null)
+  const pointersRef = useRef(new Map<number, { x: number; y: number }>())
+  const pinchRef = useRef<{
+    dist: number
+    midX: number
+    midY: number
+    zoom: number
+    x: number
+    y: number
+  } | null>(null)
 
   useEffect(() => {
     const box = boxRef.current
@@ -115,12 +124,24 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
     }
   }, [id, code])
 
+  function clampPan(zoom: number, size: number, value: number): number {
+    const min = size * (1 - zoom)
+    return Math.min(0, Math.max(min, value))
+  }
+
   function zoomAt(cx: number, cy: number, factor: number) {
     setView((prev) => {
+      const box = boxRef.current
+      const w = box?.clientWidth ?? 1000
+      const h = box?.clientHeight ?? 600
       const zoom = clampZoom(prev.zoom * factor)
       const px = (cx - prev.x) / prev.zoom
       const py = (cy - prev.y) / prev.zoom
-      return { zoom, x: cx - px * zoom, y: cy - py * zoom }
+      return {
+        zoom,
+        x: clampPan(zoom, w, cx - px * zoom),
+        y: clampPan(zoom, h, cy - py * zoom),
+      }
     })
   }
 
@@ -128,7 +149,6 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
     const box = boxRef.current
     if (!box) return
     const onWheel = (event: WheelEvent) => {
-      if (!event.ctrlKey) return
       event.preventDefault()
       const rect = box.getBoundingClientRect()
       zoomAt(event.clientX - rect.left, event.clientY - rect.top, event.deltaY < 0 ? 1.12 : 0.89)
@@ -153,25 +173,94 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
   }
 
   function onPointerDown(event: React.PointerEvent<HTMLDivElement>) {
-    if (view.zoom <= 1) return
-    event.currentTarget.setPointerCapture(event.pointerId)
-    dragRef.current = { startX: event.clientX, startY: event.clientY, originX: view.x, originY: view.y }
-    setDragging(true)
+    const touch = event.pointerType === 'touch'
+    const shouldCapture = !touch || view.zoom > 1 || pointersRef.current.size > 0
+    if (shouldCapture) {
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId)
+      } catch {
+        // pointer capture can be unavailable (synthetic events, some webviews)
+      }
+    }
+    pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+    if (pointersRef.current.size === 2) {
+      if (touch) {
+        try {
+          event.currentTarget.setPointerCapture([...pointersRef.current.keys()][0])
+        } catch {
+          // ignore
+        }
+      }
+      const [p1, p2] = [...pointersRef.current.values()]
+      pinchRef.current = {
+        dist: Math.hypot(p2.x - p1.x, p2.y - p1.y),
+        midX: (p1.x + p2.x) / 2,
+        midY: (p1.y + p2.y) / 2,
+        zoom: view.zoom,
+        x: view.x,
+        y: view.y,
+      }
+      dragRef.current = null
+      setDragging(true)
+    } else if (touch && view.zoom <= 1) {
+      dragRef.current = null
+    } else {
+      dragRef.current = { startX: event.clientX, startY: event.clientY, originX: view.x, originY: view.y }
+      setDragging(true)
+    }
   }
 
   function onPointerMove(event: React.PointerEvent<HTMLDivElement>) {
+    if (!pointersRef.current.has(event.pointerId)) return
+    pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
+    const pinch = pinchRef.current
+    if (pointersRef.current.size === 2 && pinch) {
+      const [p1, p2] = [...pointersRef.current.values()]
+      const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y)
+      const midX = (p1.x + p2.x) / 2
+      const midY = (p1.y + p2.y) / 2
+      const box = boxRef.current
+      if (!box || pinch.dist <= 0) return
+      const rect = box.getBoundingClientRect()
+      const bx = pinch.midX - rect.left
+      const by = pinch.midY - rect.top
+      setView(() => {
+        const zoom = clampZoom(pinch.zoom * (dist / pinch.dist))
+        const px = (bx - pinch.x) / pinch.zoom
+        const py = (by - pinch.y) / pinch.zoom
+        return {
+          zoom,
+          x: clampPan(zoom, rect.width, bx - px * zoom + (midX - pinch.midX)),
+          y: clampPan(zoom, rect.height, by - py * zoom + (midY - pinch.midY)),
+        }
+      })
+      return
+    }
     const drag = dragRef.current
     if (!drag) return
-    setView((prev) => ({
-      ...prev,
-      x: drag.originX + event.clientX - drag.startX,
-      y: drag.originY + event.clientY - drag.startY,
-    }))
+    setView((prev) => {
+      const box = boxRef.current
+      const w = box?.clientWidth ?? 1000
+      const h = box?.clientHeight ?? 600
+      return {
+        ...prev,
+        x: clampPan(prev.zoom, w, drag.originX + event.clientX - drag.startX),
+        y: clampPan(prev.zoom, h, drag.originY + event.clientY - drag.startY),
+      }
+    })
   }
 
-  function onPointerUp() {
-    dragRef.current = null
-    setDragging(false)
+  function onPointerEnd(event: React.PointerEvent<HTMLDivElement>) {
+    pointersRef.current.delete(event.pointerId)
+    if (pointersRef.current.size === 0) {
+      dragRef.current = null
+      pinchRef.current = null
+      setDragging(false)
+    } else if (pointersRef.current.size === 1) {
+      const [p] = [...pointersRef.current.values()]
+      pinchRef.current = null
+      dragRef.current = { startX: p.x, startY: p.y, originX: view.x, originY: view.y }
+    }
   }
 
   if (failed) return <div className="mermaid-error">diagram failed to render</div>
@@ -196,11 +285,14 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
       <div
         ref={boxRef}
         className="mermaid-box"
-        style={{ cursor: view.zoom > 1 ? (dragging ? 'grabbing' : 'grab') : 'default' }}
+        style={{
+          cursor: view.zoom > 1 ? (dragging ? 'grabbing' : 'grab') : 'default',
+          touchAction: view.zoom > 1 ? 'none' : 'pan-y',
+        }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
+        onPointerUp={onPointerEnd}
+        onPointerCancel={onPointerEnd}
       >
         <div
           className="mermaid-zoomable"
