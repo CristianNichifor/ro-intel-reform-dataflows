@@ -214,10 +214,12 @@ export default function App() {
   return (
     <div className="app">
       <div className="class-strip">
-        <span className="live-dot" />
-        <span>{t('class.demo')}</span>
-        <span className="spacer" />
-        <span>{t('class.simulated')}</span>
+        <div className="class-strip-inner">
+          <span className="live-dot" />
+          <span>{t('class.demo')}</span>
+          <span className="spacer" />
+          <span>{t('class.simulated')}</span>
+        </div>
       </div>
       <header className="app-header">
         <div className="header-row">
@@ -245,11 +247,13 @@ export default function App() {
       </header>
       <main className="app-main">{content}</main>
       <footer className="app-footer">
-        <span>ro-intel-reform-dataflows</span>
-        <a href="https://github.com/CristianNichifor/ro-intel-reform-dataflows" target="_blank" rel="noreferrer">
-          source ↗
-        </a>
-        <span>{t('footer.tag')}</span>
+        <div className="app-footer-inner">
+          <span>ro-intel-reform-dataflows</span>
+          <a href="https://github.com/CristianNichifor/ro-intel-reform-dataflows" target="_blank" rel="noreferrer">
+            source ↗
+          </a>
+          <span>{t('footer.tag')}</span>
+        </div>
       </footer>
     </div>
   )

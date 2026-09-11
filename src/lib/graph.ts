@@ -21,21 +21,75 @@ const CURRENT_POSITIONS: Record<string, XYPosition> = {
   PUB: { x: 880, y: 540 },
 }
 
+// Bowtie layout: SRI/SIE hubs on the left/right, shared counterparts stacked in a
+// central column. Handles are chosen per edge so fan edges stay in the side
+// corridors and reverse pairs run on separate sides (see TARGET_HANDLES).
 const TARGET_POSITIONS: Record<string, XYPosition> = {
-  CSAT: { x: 40, y: 0 },
-  PRES: { x: 240, y: 0 },
-  SSC: { x: 700, y: 0 },
-  SRI: { x: 200, y: 220 },
-  IADE: { x: 700, y: 220 },
-  SIE: { x: 1200, y: 220 },
-  DNSC: { x: 40, y: 470 },
-  DIICOT: { x: 1060, y: 470 },
-  ICCJ: { x: 1300, y: 470 },
-  IG: { x: 700, y: 470 },
-  JPC: { x: 460, y: 680 },
-  ITAP: { x: 250, y: 680 },
-  ANSPDCP: { x: 900, y: 680 },
-  OMB: { x: 40, y: 680 },
+  CSAT: { x: 520, y: 0 },
+  DIICOT: { x: 520, y: 160 },
+  ANSPDCP: { x: 520, y: 320 },
+  DNSC: { x: 520, y: 480 },
+  SSC: { x: 520, y: 640 },
+  IADE: { x: 520, y: 800 },
+  IG: { x: 520, y: 960 },
+  SRI: { x: 200, y: 800 },
+  SIE: { x: 840, y: 800 },
+  PRES: { x: 760, y: 0 },
+  ICCJ: { x: 760, y: 160 },
+  JPC: { x: 520, y: 1120 },
+  ITAP: { x: 60, y: 1120 },
+  OMB: { x: 60, y: 960 },
+}
+
+type HandleSide = 'left' | 'right' | 'top' | 'bottom'
+
+const TARGET_HANDLES: Record<string, [HandleSide, HandleSide]> = {
+  T3: ['right', 'left'],
+  T4: ['right', 'left'],
+  T5: ['bottom', 'bottom'],
+  T6: ['bottom', 'bottom'],
+  T7: ['right', 'left'],
+  T8: ['bottom', 'bottom'],
+  T7b: ['left', 'right'],
+  T8b: ['top', 'top'],
+  T9: ['right', 'left'],
+  T9b: ['left', 'right'],
+  T10: ['bottom', 'left'],
+  T11: ['right', 'left'],
+  T11b: ['left', 'right'],
+  T11c: ['bottom', 'top'],
+  T12: ['bottom', 'top'],
+  T13: ['right', 'left'],
+  T14: ['right', 'left'],
+  T14b: ['left', 'right'],
+  T15: ['right', 'left'],
+  T15b: ['left', 'right'],
+  T16: ['right', 'left'],
+  T17: ['right', 'left'],
+  T18: ['left', 'bottom'],
+  T18b: ['right', 'bottom'],
+  W1: ['left', 'right'],
+  W2: ['right', 'left'],
+}
+
+interface EdgeRouting {
+  type?: 'straight'
+  sourceHandle?: string
+  targetHandle?: string
+}
+
+// Top/bottom reverse arcs bow into the dense central column with bezier
+// control points, so these are drawn as straight lines instead.
+const TARGET_STRAIGHT = new Set(['T8'])
+
+function targetEdgeRouting(flow: Flow): EdgeRouting {
+  const sides = TARGET_HANDLES[flow.id]
+  if (!sides) return {}
+  return {
+    type: TARGET_STRAIGHT.has(flow.id) ? 'straight' : undefined,
+    sourceHandle: `source-${sides[0]}`,
+    targetHandle: `target-${sides[1]}`,
+  }
 }
 
 export function edgeColor(flow: Flow): string {
@@ -94,12 +148,16 @@ export function buildGraph(
 
   const edges: Edge[] = flows.map((flow) => {
     const color = edgeColor(flow)
+    const routing = mode === 'target' ? targetEdgeRouting(flow) : {}
     return {
       id: `${mode}:${flow.id}`,
       source: `${mode}:${flow.source}`,
       target: `${mode}:${flow.target}`,
       label: flow.id,
       data: { flow },
+      type: routing.type,
+      sourceHandle: routing.sourceHandle,
+      targetHandle: routing.targetHandle,
       style: { stroke: color, strokeWidth: 1.5 },
       markerEnd: { type: MarkerType.ArrowClosed, color },
       labelStyle: { fill: '#cbd5e1', fontSize: 9, fontWeight: 700 },

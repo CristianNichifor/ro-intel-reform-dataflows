@@ -13,6 +13,17 @@ const GLYPHS: Record<ActorCategory, string> = {
   public: '◎',
 }
 
+const HANDLES: Array<{ id: string; type: 'source' | 'target'; position: Position }> = [
+  { id: 'source-left', type: 'source', position: Position.Left },
+  { id: 'target-left', type: 'target', position: Position.Left },
+  { id: 'source-right', type: 'source', position: Position.Right },
+  { id: 'target-right', type: 'target', position: Position.Right },
+  { id: 'source-top', type: 'source', position: Position.Top },
+  { id: 'target-top', type: 'target', position: Position.Top },
+  { id: 'source-bottom', type: 'source', position: Position.Bottom },
+  { id: 'target-bottom', type: 'target', position: Position.Bottom },
+]
+
 export default function ActorNode({ data }: NodeProps<Node<ActorNodeData>>) {
   return (
     <div className="actor-node" style={{ borderColor: data.color }}>
@@ -26,8 +37,20 @@ export default function ActorNode({ data }: NodeProps<Node<ActorNodeData>>) {
         </span>
       </div>
       <div className="actor-node-role">{data.role}</div>
-      <Handle type="target" position={Position.Left} style={{ background: data.color, width: 7, height: 7 }} />
-      <Handle type="source" position={Position.Right} style={{ background: data.color, width: 7, height: 7 }} />
+      <div className="actor-node-tip">
+        <div className="actor-node-tip-name">{data.label}</div>
+        <div className="actor-node-tip-role">{data.role}</div>
+        {data.note && <div className="actor-node-tip-note">{data.note}</div>}
+      </div>
+      {HANDLES.map((handle) => (
+        <Handle
+          key={handle.id}
+          id={handle.id}
+          type={handle.type}
+          position={handle.position}
+          style={{ background: data.color, width: 7, height: 7 }}
+        />
+      ))}
     </div>
   )
 }
