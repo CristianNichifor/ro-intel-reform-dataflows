@@ -1399,24 +1399,76 @@ h3 {
   min-width: 0;
 }
 
+.gov-diagram-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
 .gov-diagram-title {
   color: var(--accent);
   font-size: 11px;
   font-family: var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 10px;
+}
+
+.gov-diagram-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.gov-diagram-controls button {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  width: 26px;
+  height: 24px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+}
+
+.gov-diagram-controls button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.gov-zoom-value {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 38px;
+  text-align: center;
 }
 
 .mermaid-box {
-  overflow-x: auto;
-  display: flex;
-  justify-content: center;
+  overflow: hidden;
+  height: 440px;
+  position: relative;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  touch-action: none;
+}
+
+.mermaid-zoomable {
+  width: 100%;
+  transform-origin: 0 0;
+  will-change: transform;
 }
 
 .mermaid-box svg {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
 .mermaid-error {
