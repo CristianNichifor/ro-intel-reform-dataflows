@@ -1,4 +1,5 @@
 import { canonicalize, hmacSign, SSC_SIGNING_KEY, uuid } from './crypto'
+import { translate, type Language } from '../i18n/messages'
 
 export interface RequestObject {
   caseId: string
@@ -31,23 +32,27 @@ export const PREDICATES = [
   'critical_infrastructure_attack',
 ]
 
-export async function sscReview(request: RequestObject, receivingAgency: string): Promise<SscDecision> {
+export async function sscReview(
+  request: RequestObject,
+  receivingAgency: string,
+  lang: Language,
+): Promise<SscDecision> {
   const failures: string[] = []
   if (!PREDICATES.includes(request.predicate)) {
-    failures.push(`predicate "${request.predicate}" not in statutory scope`)
+    failures.push(translate('warrant.predicateOut', lang, { p: request.predicate }))
   }
   if (
     request.subjects.length === 0 ||
     request.subjects.includes('*') ||
     request.subjects.length > 50
   ) {
-    failures.push('subjects fail the specificity test (no mass or wildcard queries)')
+    failures.push(translate('warrant.specificity', lang))
   }
   if (!request.caseId) {
-    failures.push('no case ID linkage')
+    failures.push(translate('warrant.noCase', lang))
   }
   if (request.justification.trim().length < 20) {
-    failures.push('justification missing or insufficient')
+    failures.push(translate('warrant.noJustification', lang))
   }
   if (failures.length > 0) {
     return { approved: false, token: null, reason: failures.join('; ') }
@@ -70,6 +75,6 @@ export async function sscReview(request: RequestObject, receivingAgency: string)
   return {
     approved: true,
     token: { ...unsigned, signature },
-    reason: 'predicate in scope, request specific, no less intrusive means available',
+    reason: translate('warrant.approved', lang),
   }
 }

@@ -2,6 +2,7 @@ import { MarkerType, type Edge, type Node, type XYPosition } from '@xyflow/react
 import { currentActors, resolveActorColor, targetActors } from '../data/actors'
 import { currentFlows, targetFlows } from '../data/flows'
 import type { ActorNodeData, Flow } from '../data/types'
+import { pick, type Language } from '../i18n/messages'
 
 export type GraphMode = 'current' | 'target'
 
@@ -39,7 +40,7 @@ const TARGET_POSITIONS: Record<string, XYPosition> = {
 
 export function edgeColor(flow: Flow): string {
   if (flow.category === 'current') {
-    const audit = flow.audit ?? 'Low'
+    const audit = flow.audit ? pick(flow.audit, 'en') : 'Low'
     if (audit === 'Very low' || audit === 'None') return '#ef4444'
     if (audit === 'Low') return '#f59e0b'
     return '#facc15'
@@ -70,7 +71,10 @@ export function edgeColor(flow: Flow): string {
   return '#60a5fa'
 }
 
-export function buildGraph(mode: GraphMode): { nodes: Node<ActorNodeData>[]; edges: Edge[] } {
+export function buildGraph(
+  mode: GraphMode,
+  lang: Language,
+): { nodes: Node<ActorNodeData>[]; edges: Edge[] } {
   const actors = mode === 'current' ? currentActors : targetActors
   const flows = mode === 'current' ? currentFlows : targetFlows
   const positions = mode === 'current' ? CURRENT_POSITIONS : TARGET_POSITIONS
@@ -80,11 +84,11 @@ export function buildGraph(mode: GraphMode): { nodes: Node<ActorNodeData>[]; edg
     type: 'actor',
     position: positions[actor.id] ?? { x: 0, y: 0 },
     data: {
-      label: actor.name,
-      role: actor.role,
+      label: pick(actor.name, lang),
+      role: pick(actor.role, lang),
       category: actor.category,
       color: resolveActorColor(actor, mode),
-      note: actor.note,
+      note: actor.note ? pick(actor.note, lang) : undefined,
     },
   }))
 

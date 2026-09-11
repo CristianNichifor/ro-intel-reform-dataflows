@@ -2,16 +2,12 @@ import { useRef, useState } from 'react'
 import { appendLedger, getLedgerEntries } from '../lib/ledger'
 import { sscReview, type RequestObject } from '../lib/warrant'
 import GlossedText from './GlossedText'
+import { useI18n } from '../i18n/useI18n'
+import type { MessageKey } from '../i18n/messages'
 
 interface Artifact {
   label: string
   json: unknown
-}
-
-interface Step {
-  actor: string
-  title: string
-  detail: string
 }
 
 const MASS_QUERY: RequestObject = {
@@ -22,18 +18,12 @@ const MASS_QUERY: RequestObject = {
   justification: 'dragnet sweep',
 }
 
-const STEPS: Step[] = [
-  { actor: 'Rogue analyst', title: 'Drafts a mass query', detail: 'Wildcard subjects, broad predicate, no case ID — a dragnet sweep attempt.' },
-  { actor: 'SRI → SSC', title: 'Sends request to the SSC', detail: 'The warrant request must pass the double-check before anything else happens.' },
-  { actor: 'SSC', title: 'Double-check fails — DENIED', detail: 'Specificity test fails (mass query), predicate out of statutory scope, no case linkage. No token issued.' },
-  { actor: 'Rogue analyst', title: 'Attempts IADE anyway, without a token', detail: 'Tries to bypass the judicial gate by sending the request directly to the broker.' },
-  { actor: 'IADE', title: '403 — invalid or missing warrant token', detail: 'Broker refuses the request and logs the rejected attempt to the audit ledger.' },
-  { actor: 'IG + ITAP', title: 'Alerted by the audit ledger', detail: 'The rejected attempt is permanently visible to independent oversight. No content ever moved.' },
-]
+const STEP_KEYS = [1, 2, 3, 4, 5, 6]
 
 const FAILED_STEPS = new Set([2, 4])
 
 export default function RedTeamScenario() {
+  const { t, lang } = useI18n()
   const [stepIndex, setStepIndex] = useState(0)
   const stepRef = useRef(0)
   const busyRef = useRef(false)
@@ -41,23 +31,23 @@ export default function RedTeamScenario() {
   const [running, setRunning] = useState(false)
   const timerRef = useRef<number | null>(null)
 
-  const done = stepIndex >= STEPS.length
-  const blocked = stepIndex >= STEPS.length
+  const done = stepIndex >= STEP_KEYS.length
+  const blocked = stepIndex >= STEP_KEYS.length
 
   async function runStep(index: number) {
     switch (index) {
       case 0:
-        setArtifact({ label: 'Mass query request', json: MASS_QUERY })
+        setArtifact({ label: t('redteam.artifact.massQuery'), json: MASS_QUERY })
         break
       case 2: {
-        const decision = await sscReview(MASS_QUERY, 'SIE')
-        setArtifact({ label: 'SSC decision', json: { approved: decision.approved, reason: decision.reason } })
+        const decision = await sscReview(MASS_QUERY, 'SIE', lang)
+        setArtifact({ label: t('redteam.artifact.sscDecision'), json: { approved: decision.approved, reason: decision.reason } })
         await appendLedger({
           flowType: 'SSC',
           initiator: 'SSC',
           receiver: 'SRI',
           status: 'rejected',
-          note: 'Warrant DENIED — mass query fails specificity test',
+          note: t('redteam.ledger.denied'),
         })
         break
       }
@@ -67,14 +57,14 @@ export default function RedTeamScenario() {
           initiator: 'SRI',
           receiver: 'IADE',
           status: 'rejected',
-          note: 'Request rejected 403 — invalid or missing warrant token',
+          note: t('redteam.ledger.denied403'),
         })
-        setArtifact({ label: 'IADE response', json: { status: 403, error: 'invalid_or_missing_warrant_token', logged: true } })
+        setArtifact({ label: t('redteam.artifact.iade'), json: { status: 403, error: 'invalid_or_missing_warrant_token', logged: true } })
         break
       }
       case 5: {
         const rejected = getLedgerEntries().filter((entry) => entry.status === 'rejected')
-        setArtifact({ label: 'Oversight view — rejected attempts on the permanent record', json: rejected.map(({ entryHash: _entryHash, ...rest }) => rest) })
+        setArtifact({ label: t('redteam.artifact.oversight'), json: rejected.map(({ entryHash: _entryHash, ...rest }) => rest) })
         break
       }
       default:
@@ -105,7 +95,7 @@ export default function RedTeamScenario() {
     setRunning(true)
     timerRef.current = window.setInterval(() => {
       if (busyRef.current) return
-      if (stepRef.current >= STEPS.length) {
+      if (stepRef.current >= STEP_KEYS.length) {
         stopTimer()
         return
       }
@@ -114,7 +104,7 @@ export default function RedTeamScenario() {
         stepRef.current += 1
         setStepIndex(stepRef.current)
         busyRef.current = false
-        if (stepRef.current >= STEPS.length) stopTimer()
+        if (stepRef.current >= STEP_KEYS.length) stopTimer()
       })
     }, 1300)
   }
@@ -130,38 +120,35 @@ export default function RedTeamScenario() {
     <div className="sim redteam shell">
       <div className="sim-head">
         <div>
-          <p className="section-label">Live Simulation</p>
-          <h2>Red-Team Scenario · Blocked Mass Query</h2>
+          <p className="section-label">{t('section.sim')}</p>
+          <h2>{t('redteam.title')}</h2>
         </div>
         <div className="sim-actions">
           <span className="sim-progress">
-            STEP {String(Math.min(stepIndex + 1, STEPS.length)).padStart(2, '0')}/{String(STEPS.length).padStart(2, '0')}
+            {t('sim.step', { a: String(Math.min(stepIndex + 1, STEP_KEYS.length)).padStart(2, '0'), b: String(STEP_KEYS.length).padStart(2, '0') })}
           </span>
           <button className="btn" onClick={next} disabled={done || running}>
-            <span aria-hidden>▶</span> Next step
+            <span aria-hidden>▶</span> {t('sim.next')}
           </button>
           <button className="btn" onClick={autoRun} disabled={done && !running}>
-            <span aria-hidden>{running ? '■' : '▶▶'}</span> {running ? 'Stop' : 'Auto run'}
+            <span aria-hidden>{running ? '■' : '▶▶'}</span> {t(running ? 'sim.stop' : 'sim.auto')}
           </button>
           <button className="btn btn-ghost" onClick={reset}>
-            <span aria-hidden>↺</span> Reset
+            <span aria-hidden>↺</span> {t('sim.reset')}
           </button>
         </div>
       </div>
       <div className="progress-track">
-        <div className="progress-fill" style={{ width: `${(stepIndex / STEPS.length) * 100}%` }} />
+        <div className="progress-fill" style={{ width: `${(stepIndex / STEP_KEYS.length) * 100}%` }} />
       </div>
       {blocked && (
-        <div className="outcome-banner">
-          Unauthorized mass query blocked — zero content moved, two rejection entries on the
-          immutable audit ledger, oversight alerted.
-        </div>
+        <div className="outcome-banner">{t('redteam.banner')}</div>
       )}
       <div className="sim-body">
         <ol className="timeline">
-          {STEPS.map((step, index) => (
+          {STEP_KEYS.map((key, index) => (
             <li
-              key={step.title}
+              key={key}
               className={
                 index < stepIndex
                   ? FAILED_STEPS.has(index)
@@ -172,13 +159,13 @@ export default function RedTeamScenario() {
                     : 'pending'
               }
             >
-              <div className="timeline-actor">{step.actor}</div>
+              <div className="timeline-actor">{t(`redteam.s${key}.a` as MessageKey)}</div>
               <div className="timeline-title">
-                <GlossedText text={step.title} />
+                <GlossedText text={t(`redteam.s${key}.t` as MessageKey)} />
               </div>
               {index <= stepIndex && (
                 <div className="timeline-detail">
-                  <GlossedText text={step.detail} />
+                  <GlossedText text={t(`redteam.s${key}.d` as MessageKey)} />
                 </div>
               )}
             </li>
@@ -186,12 +173,12 @@ export default function RedTeamScenario() {
         </ol>
         <div className="sim-side">
           <div className="artifact-panel">
-            <h3>{artifact ? artifact.label : 'Artifacts appear here'}</h3>
+            <h3>{artifact ? artifact.label : t('redteam.artifact.pending')}</h3>
             {artifact && <pre className="artifact-json">{JSON.stringify(artifact.json, null, 2)}</pre>}
-            {!artifact && <p className="muted">Walk through the attack to see how the architecture blocks it.</p>}
+            {!artifact && <p className="muted">{t('redteam.artifact.pendingHint')}</p>}
           </div>
           <div className="sim-note">
-            <GlossedText text="Design claim tested: the double-check (SSC predicate + specificity validation) plus token enforcement at the broker makes a mass query fail twice — at the judicial gate and at the transport layer — while leaving an audit trail." />
+            <GlossedText text={t('redteam.note')} />
           </div>
         </div>
       </div>

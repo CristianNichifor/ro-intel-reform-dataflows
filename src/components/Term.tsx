@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { GLOSSARY } from '../data/glossary'
+import { pick } from '../i18n/messages'
+import { useI18n } from '../i18n/useI18n'
 
 const TIP_WIDTH = 290
 const MARGIN = 10
 const SHOW_DELAY = 220
 
 export default function Term({ term, children }: { term: string; children: ReactNode }) {
-  const definition = GLOSSARY[term.toLowerCase()]
+  const { lang } = useI18n()
+  const localized = GLOSSARY[term.toLowerCase()]
+  const definition = localized ? pick(localized, lang) : undefined
   const [tip, setTip] = useState<{ x: number; y: number; above: boolean } | null>(null)
   const ref = useRef<HTMLSpanElement>(null)
   const timerRef = useRef<number | null>(null)

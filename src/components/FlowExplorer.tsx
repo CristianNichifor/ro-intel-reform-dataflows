@@ -13,19 +13,21 @@ import ActorNode from './ActorNode'
 import GlossedText from './GlossedText'
 import { buildGraph, type GraphMode } from '../lib/graph'
 import { currentActors, targetActors } from '../data/actors'
+import { useI18n } from '../i18n/useI18n'
+import { pick, type MessageKey } from '../i18n/messages'
 import type { Actor, ActorCategory, ActorNodeData, Flow } from '../data/types'
 
 const nodeTypes = { actor: ActorNode }
 
-const CATEGORY_FILTERS: Array<{ id: ActorCategory; label: string }> = [
-  { id: 'agency', label: 'Agencies' },
-  { id: 'executive', label: 'Executive' },
-  { id: 'oversight', label: 'Oversight' },
-  { id: 'justice', label: 'Justice' },
-  { id: 'judicial', label: 'Judicial' },
-  { id: 'civilian', label: 'Civilian' },
-  { id: 'broker', label: 'Broker' },
-  { id: 'public', label: 'Public' },
+const CATEGORY_FILTERS: Array<{ id: ActorCategory; labelKey: MessageKey }> = [
+  { id: 'agency', labelKey: 'cat.agency' },
+  { id: 'executive', labelKey: 'cat.executive' },
+  { id: 'oversight', labelKey: 'cat.oversight' },
+  { id: 'justice', labelKey: 'cat.justice' },
+  { id: 'judicial', labelKey: 'cat.judicial' },
+  { id: 'civilian', labelKey: 'cat.civilian' },
+  { id: 'broker', labelKey: 'cat.broker' },
+  { id: 'public', labelKey: 'cat.public' },
 ]
 
 type Selection =
@@ -34,24 +36,25 @@ type Selection =
   | null
 
 function DetailPanel({ selection, onClose }: { selection: Selection; onClose: () => void }) {
+  const { t, lang } = useI18n()
   if (!selection) return null
   if (selection.kind === 'flow') {
     const flow = selection.flow
     const rows: Array<[string, string]> = [
-      ['Flow', flow.id],
-      ['Source', flow.source],
-      ['Destination', flow.target],
-      ['Data type', flow.dataType],
-      [flow.category === 'current' ? 'Legal basis' : 'Legal gate', flow.legal],
-      [flow.category === 'current' ? 'Auditability' : 'Audit ledger entry', flow.audit ?? '—'],
+      [t('detail.flow'), flow.id],
+      [t('detail.source'), flow.source],
+      [t('detail.destination'), flow.target],
+      [t('detail.dataType'), pick(flow.dataType, lang)],
+      [t(flow.category === 'current' ? 'detail.legalBasis' : 'detail.legalGate'), pick(flow.legal, lang)],
+      [t(flow.category === 'current' ? 'detail.auditability' : 'detail.auditEntry'), flow.audit ? pick(flow.audit, lang) : '—'],
     ]
-    if (flow.category === 'current' && flow.risk) rows.push(['Risk', flow.risk])
-    if (flow.category === 'target' && flow.oversight) rows.push(['Oversight visibility', flow.oversight])
+    if (flow.category === 'current' && flow.risk) rows.push([t('detail.risk'), pick(flow.risk, lang)])
+    if (flow.category === 'target' && flow.oversight) rows.push([t('detail.oversight'), pick(flow.oversight, lang)])
     return (
       <div className="detail-panel">
         <div className="detail-header">
-          <h3>FLOW {flow.id}</h3>
-          <button className="close-btn" onClick={onClose} aria-label="Close">
+          <h3>{t('detail.flow')} {flow.id}</h3>
+          <button className="close-btn" onClick={onClose} aria-label={t('detail.close')}>
             ×
           </button>
         </div>
@@ -67,7 +70,7 @@ function DetailPanel({ selection, onClose }: { selection: Selection; onClose: ()
         </table>
         {flow.description && (
           <p className="detail-desc">
-            <GlossedText text={flow.description} />
+            <GlossedText text={pick(flow.description, lang)} />
           </p>
         )}
       </div>
@@ -77,58 +80,54 @@ function DetailPanel({ selection, onClose }: { selection: Selection; onClose: ()
   return (
     <div className="detail-panel">
       <div className="detail-header">
-        <h3>{actor.name.toUpperCase()}</h3>
-        <button className="close-btn" onClick={onClose} aria-label="Close">
+        <h3>{pick(actor.name, lang).toUpperCase()}</h3>
+        <button className="close-btn" onClick={onClose} aria-label={t('detail.close')}>
           ×
         </button>
       </div>
       <table className="kv-table">
         <tbody>
           <tr>
-            <td>Role</td>
-            <td>{actor.role}</td>
+            <td>{t('detail.role')}</td>
+            <td><GlossedText text={pick(actor.role, lang)} /></td>
           </tr>
           <tr>
-            <td>Category</td>
-            <td>{actor.category}</td>
+            <td>{t('detail.category')}</td>
+            <td>{t(`cat.${actor.category}` as MessageKey)}</td>
           </tr>
         </tbody>
       </table>
-      {actor.note && <p className="detail-desc">{actor.note}</p>}
+      {actor.note && (
+        <p className="detail-desc">
+          <GlossedText text={pick(actor.note, lang)} />
+        </p>
+      )}
     </div>
   )
 }
 
 function Legend({ mode }: { mode: GraphMode }) {
+  const { t } = useI18n()
   const [open, setOpen] = useState(false)
-  const items =
+  const keys =
     mode === 'current'
-      ? [
-          ['#ef4444', 'Agencies — concentrated, unaudited data power'],
-          ['#facc15', 'Oversight — limited access'],
-          ['#c084fc', 'Justice'],
-          ['#94a3b8', 'Executive / public'],
-          ['#f59e0b', 'Edge = auditability (red = none)'],
-        ]
-      : [
-          ['#60a5fa', 'IADE — stateless broker'],
-          ['#4ade80', 'SSC — judicial gate'],
-          ['#f472b6', 'Oversight'],
-          ['#c084fc', 'Justice'],
-          ['#2dd4bf', 'Civilian'],
-          ['#475569', 'Civilianized agencies'],
-        ]
+      ? (['legend.current.i1', 'legend.current.i2', 'legend.current.i3', 'legend.current.i4', 'legend.current.i5'] as MessageKey[])
+      : (['legend.target.i1', 'legend.target.i2', 'legend.target.i3', 'legend.target.i4', 'legend.target.i5', 'legend.target.i6'] as MessageKey[])
+  const colors =
+    mode === 'current'
+      ? ['#ef4444', '#facc15', '#c084fc', '#94a3b8', '#f59e0b']
+      : ['#60a5fa', '#4ade80', '#f472b6', '#c084fc', '#2dd4bf', '#475569']
   return (
     <div className="legend">
       <button className="legend-toggle" onClick={() => setOpen((value) => !value)}>
-        <span>{open ? '▾' : '▸'}</span> Legend
+        <span>{open ? '▾' : '▸'}</span> {t('explorer.legend')}
       </button>
       {open && (
         <div className="legend-items">
-          {items.map(([color, label]) => (
-            <span key={label}>
-              <i style={{ background: color }} />
-              {label}
+          {keys.map((key, index) => (
+            <span key={key}>
+              <i style={{ background: colors[index] }} />
+              {t(key)}
             </span>
           ))}
         </div>
@@ -138,7 +137,8 @@ function Legend({ mode }: { mode: GraphMode }) {
 }
 
 export default function FlowExplorer({ mode }: { mode: GraphMode }) {
-  const graph = useMemo(() => buildGraph(mode), [mode])
+  const { t, lang } = useI18n()
+  const graph = useMemo(() => buildGraph(mode, lang), [mode, lang])
   const actors = mode === 'current' ? currentActors : targetActors
 
   const [query, setQuery] = useState('')
@@ -167,12 +167,12 @@ export default function FlowExplorer({ mode }: { mode: GraphMode }) {
         .filter(
           (actor) =>
             !normalized ||
-            actor.name.toLowerCase().includes(normalized) ||
-            actor.role.toLowerCase().includes(normalized),
+            pick(actor.name, lang).toLowerCase().includes(normalized) ||
+            pick(actor.role, lang).toLowerCase().includes(normalized),
         )
         .map((actor) => actor.id),
     )
-  }, [actors, hiddenCats, query])
+  }, [actors, hiddenCats, lang, query])
 
   const { nodes, edges } = useMemo(() => {
     const prefix = `${mode}:`
@@ -241,7 +241,7 @@ export default function FlowExplorer({ mode }: { mode: GraphMode }) {
           <input
             className="explorer-search"
             type="search"
-            placeholder="filter actors…  (esc to clear)"
+            placeholder={t('explorer.search')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
@@ -258,15 +258,15 @@ export default function FlowExplorer({ mode }: { mode: GraphMode }) {
               className={`chip ${hiddenCats.has(filter.id) ? 'off' : 'on'}`}
               onClick={() => toggleCategory(filter.id)}
             >
-              {filter.label}
+              {t(filter.labelKey)}
             </button>
           ))}
           <button
             className={`chip ${showLabels ? 'on' : 'off'}`}
             onClick={() => setShowLabels((value) => !value)}
-            title="Toggle flow labels"
+            title={t('explorer.labels')}
           >
-            Labels
+            {t('explorer.labels')}
           </button>
         </div>
       </div>

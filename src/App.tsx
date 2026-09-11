@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import FlowExplorer from './components/FlowExplorer'
+import GlossedText from './components/GlossedText'
 import HandshakeSim from './components/HandshakeSim'
 import LedgerViewer from './components/LedgerViewer'
 import OversightDashboard from './components/OversightDashboard'
 import RedTeamScenario from './components/RedTeamScenario'
 import { currentActors, targetActors } from './data/actors'
 import { currentFlows, targetFlows } from './data/flows'
-import GlossedText from './components/GlossedText'
+import { useI18n } from './i18n/useI18n'
+import type { MessageKey } from './i18n/messages'
 import type { GraphMode } from './lib/graph'
 import { seedLedger } from './lib/ledger'
 
@@ -19,23 +21,14 @@ type View =
   | 'dashboard'
   | 'ledger'
 
-const NAV: Array<{ id: View; label: string }> = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'current', label: 'Current State' },
-  { id: 'target', label: 'Target State' },
-  { id: 'handshake', label: 'Handshake T3–T6' },
-  { id: 'redteam', label: 'Red Team' },
-  { id: 'dashboard', label: 'Oversight' },
-  { id: 'ledger', label: 'Audit Ledger' },
-]
-
-const PRINCIPLES: Array<[string, string]> = [
-  ['No single mass database', 'Data stays at source; sharing is event-driven, not warehouse-driven'],
-  ['Purpose limitation', 'Every flow is bound to a legal predicate (threat category + warrant ID)'],
-  ['Case-by-case handshake', 'Cross-agency access requires an audited, logged request–approval transaction'],
-  ['Judicial gate', 'Surveillance content flows only through a warrant token issued by the specialized court'],
-  ['Oversight visibility ≠ operational access', 'Oversight bodies see metadata and audit logs, not raw operational content'],
-  ['De-militarized civilian agencies', 'Flows terminate in civilian authority chains (Government / Parliament / Justice)'],
+const NAV: Array<{ id: View; labelKey: MessageKey }> = [
+  { id: 'overview', labelKey: 'nav.overview' },
+  { id: 'current', labelKey: 'nav.current' },
+  { id: 'target', labelKey: 'nav.target' },
+  { id: 'handshake', labelKey: 'nav.handshake' },
+  { id: 'redteam', labelKey: 'nav.redteam' },
+  { id: 'dashboard', labelKey: 'nav.oversight' },
+  { id: 'ledger', labelKey: 'nav.ledger' },
 ]
 
 function parseHash(): View {
@@ -44,56 +37,66 @@ function parseHash(): View {
 }
 
 function Overview() {
+  const { t } = useI18n()
+  const principles = [1, 2, 3, 4, 5, 6].map((index) => ({
+    title: t(`principles.p${index}.t` as MessageKey),
+    implication: t(`principles.p${index}.i` as MessageKey),
+  }))
   return (
     <div className="shell">
       <section className="card accent-left">
-        <p className="section-label">Mission</p>
-        <h2>Romanian Intelligence Reform — Data-Flow Architecture</h2>
+        <p className="section-label">{t('section.mission')}</p>
+        <h2>{t('overview.mission.title')}</h2>
         <p>
-          <GlossedText text="Interactive demo of the current and target-state information data flows between Romania's intelligence, oversight, judicial and civilian institutions — built as a technical companion to the reform blueprint for public debate." />
+          <GlossedText text={t('overview.mission.p1')} />
         </p>
         <p className="muted">
-          <GlossedText text="Everything runs in the browser. Warrant tokens use a mock HMAC-SHA-256 signature as a stand-in for the spec's Ed25519, and the audit ledger is a real append-only hash chain, verifiable on the Oversight tab." />{' '}
-          The full specification lives in <code>docs/</code>.
+          <GlossedText text={t('overview.mission.p2')} /> {t('overview.mission.docs')}{' '}
+          <code>docs/</code>.
         </p>
       </section>
 
       <div className="stat-row">
         <div className="stat">
           <div className="stat-value">{currentActors.length}</div>
-          <div className="stat-label">Current actors</div>
+          <div className="stat-label">{t('stat.currentActors')}</div>
         </div>
         <div className="stat">
           <div className="stat-value">{currentFlows.length}</div>
-          <div className="stat-label">Current flows</div>
+          <div className="stat-label">{t('stat.currentFlows')}</div>
         </div>
         <div className="stat">
           <div className="stat-value">{targetActors.length}</div>
-          <div className="stat-label">Target actors</div>
+          <div className="stat-label">{t('stat.targetActors')}</div>
         </div>
         <div className="stat">
           <div className="stat-value">{targetFlows.length}</div>
-          <div className="stat-label">Target flows</div>
+          <div className="stat-label">{t('stat.targetFlows')}</div>
         </div>
         <div className="stat">
-          <div className="stat-value ok">{currentFlows.filter((f) => f.audit === 'Very low' || f.audit === 'None').length}</div>
-          <div className="stat-label">Baseline high-risk flows</div>
+          <div className="stat-value ok">
+            {currentFlows.filter((flow) => flow.audit?.en === 'Very low' || flow.audit?.en === 'None').length}
+          </div>
+          <div className="stat-label">{t('stat.baselineRisky')}</div>
         </div>
       </div>
 
       <section className="card">
-        <p className="section-label">Principles</p>
-        <h3>Design principles</h3>
+        <p className="section-label">{t('section.principles')}</p>
+        <h3>{t('principles.title')}</h3>
         <div className="table-scroll">
           <table className="kv-table wide">
             <thead>
-              <tr><th>Principle</th><th>Implication for data flows</th></tr>
+              <tr>
+                <th>{t('principles.h.principle')}</th>
+                <th>{t('principles.h.implication')}</th>
+              </tr>
             </thead>
             <tbody>
-              {PRINCIPLES.map(([principle, implication]) => (
-                <tr key={principle}>
-                  <td><strong><GlossedText text={principle} /></strong></td>
-                  <td><GlossedText text={implication} /></td>
+              {principles.map((principle) => (
+                <tr key={principle.title}>
+                  <td><strong><GlossedText text={principle.title} /></strong></td>
+                  <td><GlossedText text={principle.implication} /></td>
                 </tr>
               ))}
             </tbody>
@@ -103,49 +106,71 @@ function Overview() {
 
       <div className="dash-grid">
         <section className="card">
-          <p className="section-label">Baseline</p>
-          <h3>Current state (pre-reform)</h3>
+          <p className="section-label">{t('section.baseline')}</p>
+          <h3>{t('overview.current.title')}</h3>
           <ul className="plain-list">
-            <li><GlossedText text="SRI receives, stores and correlates data without a unified warrant ledger" /></li>
-            <li><GlossedText text="CSAT coordinates with limited transparency" /></li>
-            <li><GlossedText text="Parliament receives filtered briefings, not verifiable data" /></li>
-            <li><GlossedText text="Prosecutors receive referrals, not traceable evidence chains" /></li>
-            <li><GlossedText text="No independent audit trail linking data to a legal predicate" /></li>
+            {[1, 2, 3, 4, 5].map((index) => (
+              <li key={index}>
+                <GlossedText text={t(`overview.current.i${index}` as MessageKey)} />
+              </li>
+            ))}
           </ul>
         </section>
         <section className="card">
-          <p className="section-label">Reform</p>
-          <h3>Target state (post-reform)</h3>
+          <p className="section-label">{t('section.reform')}</p>
+          <h3>{t('overview.target.title')}</h3>
           <ul className="plain-list">
-            <li><GlossedText text="Hub-and-spoke: agency case vaults around a stateless IADE broker" /></li>
-            <li><GlossedText text="SSC warrant tokens gate every content transfer" /></li>
-            <li><GlossedText text="Append-only, cryptographically verifiable audit ledger" /></li>
-            <li><GlossedText text="IG / JPC / ITAP oversight without operational access" /></li>
-            <li><GlossedText text="DNSC handles civilian cyber defense, separated from intelligence" /></li>
+            {[1, 2, 3, 4, 5].map((index) => (
+              <li key={index}>
+                <GlossedText text={t(`overview.target.i${index}` as MessageKey)} />
+              </li>
+            ))}
           </ul>
         </section>
       </div>
 
       <section className="card">
-        <p className="section-label">Tour</p>
-        <h3>Suggested route through the demo</h3>
+        <p className="section-label">{t('section.tour')}</p>
+        <h3>{t('overview.tour.title')}</h3>
         <ol className="plain-list">
-          <li><strong>Current State</strong> — click nodes and edges to inspect the baseline pathologies.</li>
-          <li><strong>Target State</strong> — the hub-and-spoke architecture with warrant tokens.</li>
-          <li><strong>Handshake T3–T6</strong> — step through a legal cross-agency data request.</li>
-          <li><strong>Red Team</strong> — watch an unauthorized mass query get blocked twice and logged.</li>
-          <li><strong>Oversight</strong> — aggregated metrics and hash-chain integrity from the audit ledger.</li>
+          {[1, 2, 3, 4, 5].map((index) => (
+            <li key={index}>
+              <GlossedText text={t(`overview.tour.i${index}` as MessageKey)} />
+            </li>
+          ))}
         </ol>
       </section>
     </div>
   )
 }
 
+function LanguageToggle() {
+  const { lang, setLang } = useI18n()
+  return (
+    <div className="lang-toggle" role="group" aria-label="Language">
+      {(['en', 'ro'] as const).map((code) => (
+        <button
+          key={code}
+          className={lang === code ? 'lang-btn active' : 'lang-btn'}
+          onClick={() => setLang(code)}
+          aria-pressed={lang === code}
+        >
+          {code.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export default function App() {
+  const { lang, t } = useI18n()
   const [view, setView] = useState<View>(parseHash)
 
   useEffect(() => {
-    void seedLedger()
+    void seedLedger(lang)
+  }, [lang])
+
+  useEffect(() => {
     const onHash = () => setView(parseHash())
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
@@ -184,17 +209,20 @@ export default function App() {
     <div className="app">
       <div className="class-strip">
         <span className="live-dot" />
-        <span>DEMO // UNCLASSIFIED</span>
+        <span>{t('class.demo')}</span>
         <span className="spacer" />
-        <span>SIMULATED DATA — NO REAL SYSTEMS</span>
+        <span>{t('class.simulated')}</span>
       </div>
       <header className="app-header">
         <div className="header-row">
           <div className="app-title">
-            <div className="kicker">RO · Intel Reform</div>
-            <h1>Information Data Flows</h1>
+            <div className="kicker">{t('header.kicker')}</div>
+            <h1>{t('header.title')}</h1>
           </div>
-          <span className="header-meta">v0.1 · in-browser simulation · MIT</span>
+          <div className="header-side">
+            <span className="header-meta">{t('header.meta')}</span>
+            <LanguageToggle />
+          </div>
         </div>
         <nav className="app-nav">
           {NAV.map((item, index) => (
@@ -204,7 +232,7 @@ export default function App() {
               onClick={() => navigate(item.id)}
             >
               <span className="idx">{String(index).padStart(2, '0')}</span>
-              {item.label}
+              {t(item.labelKey)}
             </button>
           ))}
         </nav>
@@ -215,7 +243,7 @@ export default function App() {
         <a href="https://github.com/CristianNichifor/ro-intel-reform-dataflows" target="_blank" rel="noreferrer">
           source ↗
         </a>
-        <span>no real data · no real systems · no legal advice</span>
+        <span>{t('footer.tag')}</span>
       </footer>
     </div>
   )

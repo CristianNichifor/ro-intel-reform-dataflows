@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { sha256Hex, uuid } from './crypto'
+import { translate, type Language, type MessageKey } from '../i18n/messages'
 
 export interface LedgerEntry {
   id: string
@@ -104,25 +105,40 @@ export async function verifyLedgerIntegrity(): Promise<{ valid: boolean; brokenA
   return { valid: true, brokenAt: null }
 }
 
-export async function seedLedger(): Promise<void> {
+export async function seedLedger(lang: Language): Promise<void> {
   if (seeded) return
   seeded = true
-  const samples: LedgerDraft[] = [
-    { flowType: 'T1', initiator: 'SRI', receiver: 'SRI vault', tokenId: 'wt-7c41-…', note: 'SIGINT collection filed to case vault (case C-2026-0312)' },
-    { flowType: 'T2', initiator: 'SIE', receiver: 'SIE vault', tokenId: 'wt-2f19-…', note: 'Foreign intel filed to case vault (case C-2026-0312)' },
-    { flowType: 'T3', initiator: 'SRI', receiver: 'IADE', tokenId: 'wt-8a3d-…', note: 'Cross-agency request for SIE-held data (case C-2026-0312)' },
-    { flowType: 'T4', initiator: 'IADE', receiver: 'SIE', tokenId: 'wt-8a3d-…', note: 'Token signature validated; request routed' },
-    { flowType: 'T5', initiator: 'SIE', receiver: 'IADE', tokenId: 'wt-8a3d-…', note: 'Minimized response package (3 fields, 14 KB)' },
-    { flowType: 'T6', initiator: 'IADE', receiver: 'SRI', tokenId: 'wt-8a3d-…', note: 'Response routed to requester' },
-    { flowType: 'T7', initiator: 'SRI', receiver: 'DNSC', tokenId: null, note: 'C2 infrastructure indicators shared under MOU (no personal data)' },
-    { flowType: 'T8', initiator: 'DNSC', receiver: 'SIE', tokenId: null, note: 'APT-28 indicators escalated (beyond civilian response capacity)' },
-    { flowType: 'T9', initiator: 'SRI', receiver: 'DIICOT', tokenId: 'wt-8a3d-…', note: 'Warranted evidence package with chain-of-custody hash' },
-    { flowType: 'T11', initiator: 'SRI', receiver: 'IG', tokenId: null, note: 'Quarterly audit log export (metadata only)' },
-    { flowType: 'T12', initiator: 'IG', receiver: 'JPC', tokenId: null, note: 'Audit findings report filed' },
-    { flowType: 'T14', initiator: 'SIE', receiver: 'ANSPDCP', tokenId: null, note: 'High-risk processing notification (DPIA attached)' },
-    { flowType: 'T15', initiator: 'SRI', receiver: 'CSAT', tokenId: null, note: 'Aggregated threat assessment (no raw data)' },
+  const noteKeys: MessageKey[] = [
+    'seed.n1',
+    'seed.n2',
+    'seed.n3',
+    'seed.n4',
+    'seed.n5',
+    'seed.n6',
+    'seed.n7',
+    'seed.n8',
+    'seed.n9',
+    'seed.n10',
+    'seed.n11',
+    'seed.n12',
+    'seed.n13',
   ]
-  for (const sample of samples) {
-    await appendLedger(sample)
+  const samples: Array<Omit<LedgerDraft, 'note'>> = [
+    { flowType: 'T1', initiator: 'SRI', receiver: 'SRI vault', tokenId: 'wt-7c41-…' },
+    { flowType: 'T2', initiator: 'SIE', receiver: 'SIE vault', tokenId: 'wt-2f19-…' },
+    { flowType: 'T3', initiator: 'SRI', receiver: 'IADE', tokenId: 'wt-8a3d-…' },
+    { flowType: 'T4', initiator: 'IADE', receiver: 'SIE', tokenId: 'wt-8a3d-…' },
+    { flowType: 'T5', initiator: 'SIE', receiver: 'IADE', tokenId: 'wt-8a3d-…' },
+    { flowType: 'T6', initiator: 'IADE', receiver: 'SRI', tokenId: 'wt-8a3d-…' },
+    { flowType: 'T7', initiator: 'SRI', receiver: 'DNSC', tokenId: null },
+    { flowType: 'T8', initiator: 'DNSC', receiver: 'SIE', tokenId: null },
+    { flowType: 'T9', initiator: 'SRI', receiver: 'DIICOT', tokenId: 'wt-8a3d-…' },
+    { flowType: 'T11', initiator: 'SRI', receiver: 'IG', tokenId: null },
+    { flowType: 'T12', initiator: 'IG', receiver: 'JPC', tokenId: null },
+    { flowType: 'T14', initiator: 'SIE', receiver: 'ANSPDCP', tokenId: null },
+    { flowType: 'T15', initiator: 'SRI', receiver: 'CSAT', tokenId: null },
+  ]
+  for (let index = 0; index < samples.length; index += 1) {
+    await appendLedger({ ...samples[index], note: translate(noteKeys[index], lang) })
   }
 }

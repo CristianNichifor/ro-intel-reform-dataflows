@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { shortHash } from '../lib/crypto'
 import { useLedger, verifyLedgerIntegrity } from '../lib/ledger'
+import { useI18n } from '../i18n/useI18n'
+import type { MessageKey } from '../i18n/messages'
 
 export default function OversightDashboard() {
+  const { t } = useI18n()
   const ledger = useLedger()
   const [integrity, setIntegrity] = useState<{ valid: boolean; brokenAt: number | null } | null>(null)
 
@@ -32,44 +35,49 @@ export default function OversightDashboard() {
   }, [ledger])
 
   const rejectedEntries = ledger.filter((entry) => entry.status === 'rejected')
+  const accessRows = [1, 2, 3, 4, 5]
 
   return (
     <div className="dashboard shell">
       <div className="sim-head">
         <div>
-          <p className="section-label">Oversight View</p>
-          <h2>Aggregated Metrics · IADE Audit Ledger</h2>
+          <p className="section-label">{t('section.oversight')}</p>
+          <h2>{t('dashboard.title')}</h2>
         </div>
       </div>
       <div className="stat-row">
         <div className="stat">
           <div className="stat-value">{ledger.length}</div>
-          <div className="stat-label">Ledger entries</div>
+          <div className="stat-label">{t('dashboard.entries')}</div>
         </div>
         <div className="stat">
           <div className="stat-value ok">{metrics.accepted}</div>
-          <div className="stat-label">Accepted</div>
+          <div className="stat-label">{t('dashboard.accepted')}</div>
         </div>
         <div className="stat">
           <div className="stat-value bad">{metrics.rejected}</div>
-          <div className="stat-label">Rejected</div>
+          <div className="stat-label">{t('dashboard.rejected')}</div>
         </div>
         <div className="stat">
           <div className="stat-value">{metrics.tokenCount}</div>
-          <div className="stat-label">Warrant tokens</div>
+          <div className="stat-label">{t('dashboard.tokens')}</div>
         </div>
         <div className="stat">
           <div className={`stat-value ${integrity?.valid === false ? 'bad' : 'ok'}`}>
-            {integrity ? (integrity.valid ? 'INTACT' : `BROKEN@${integrity.brokenAt}`) : '…'}
+            {integrity
+              ? integrity.valid
+                ? t('dashboard.intact')
+                : t('dashboard.broken', { n: integrity.brokenAt ?? 0 })
+              : '…'}
           </div>
-          <div className="stat-label">Hash-chain integrity</div>
+          <div className="stat-label">{t('dashboard.integrity')}</div>
         </div>
       </div>
 
       <div className="dash-grid">
         <section className="card">
-          <p className="section-label">Volume</p>
-          <h3>Transactions by flow type</h3>
+          <p className="section-label">{t('section.volume')}</p>
+          <h3>{t('dashboard.volume')}</h3>
           {metrics.flowBars.map(([flow, count]) => (
             <div className="bar-row" key={flow}>
               <span className="bar-label">{flow}</span>
@@ -82,9 +90,9 @@ export default function OversightDashboard() {
         </section>
 
         <section className="card">
-          <p className="section-label">Anomalies</p>
-          <h3>Rejection events</h3>
-          {rejectedEntries.length === 0 && <p className="muted">No rejected transactions on the ledger.</p>}
+          <p className="section-label">{t('section.anomalies')}</p>
+          <h3>{t('dashboard.rejections')}</h3>
+          {rejectedEntries.length === 0 && <p className="muted">{t('dashboard.rejections.none')}</p>}
           {rejectedEntries.map((entry) => (
             <div className="rejection" key={entry.id}>
               <div>
@@ -98,24 +106,26 @@ export default function OversightDashboard() {
       </div>
 
       <section className="card">
-        <p className="section-label">Access Model</p>
-        <h3>Oversight access matrix</h3>
+        <p className="section-label">{t('section.accessModel')}</p>
+        <h3>{t('dashboard.access.title')}</h3>
         <div className="table-scroll">
           <table className="kv-table wide">
-          <thead>
-            <tr>
-              <th>Body</th>
-              <th>Sees</th>
-              <th>Does not see</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Inspector General</td><td>Full audit-log access (metadata + transactions)</td><td>Raw content (without separate warrant)</td></tr>
-            <tr><td>JPC</td><td>Aggregated metrics + subpoenaed files</td><td>Operational raw data</td></tr>
-            <tr><td>ITAP</td><td>System access for technical validation</td><td>Case content</td></tr>
-            <tr><td>ANSPDCP</td><td>High-risk processing notifications</td><td>Operational data</td></tr>
-            <tr><td>Ombudsman</td><td>Complaints → trigger IG reviews</td><td>Direct case access</td></tr>
-          </tbody>
+            <thead>
+              <tr>
+                <th>{t('dashboard.access.body')}</th>
+                <th>{t('dashboard.access.sees')}</th>
+                <th>{t('dashboard.access.notSees')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accessRows.map((row) => (
+                <tr key={row}>
+                  <td>{t(`dashboard.access.r${row}.b` as MessageKey)}</td>
+                  <td>{t(`dashboard.access.r${row}.s` as MessageKey)}</td>
+                  <td>{t(`dashboard.access.r${row}.n` as MessageKey)}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </section>

@@ -1,3 +1,5 @@
+import type { Localized } from '../i18n/messages'
+
 export type ActorCategory =
   | 'executive'
   | 'agency'
@@ -10,24 +12,24 @@ export type ActorCategory =
 
 export interface Actor {
   id: string
-  name: string
-  role: string
+  name: Localized
+  role: Localized
   category: ActorCategory
-  note?: string
+  note?: Localized
 }
 
 export interface Flow {
   id: string
   source: string
   target: string
-  label: string
-  dataType: string
-  legal: string
-  audit?: string
-  oversight?: string
-  risk?: string
+  label: Localized
+  dataType: Localized
+  legal: Localized
+  audit?: Localized
+  oversight?: Localized
+  risk?: Localized
   category: 'current' | 'target'
-  description?: string
+  description?: Localized
 }
 
 export interface ActorNodeData extends Record<string, unknown> {
