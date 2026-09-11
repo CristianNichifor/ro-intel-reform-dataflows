@@ -164,10 +164,16 @@ export default function HandshakeSim() {
   }
 
   return (
-    <div className="sim">
+    <div className="sim shell">
       <div className="sim-head">
-        <h2>Flow T3–T6 · Cross-Agency Data Handshake</h2>
+        <div>
+          <p className="section-label">Live Simulation</p>
+          <h2>Flow T3–T6 · Cross-Agency Data Handshake</h2>
+        </div>
         <div className="sim-actions">
+          <span className="sim-progress">
+            STEP {String(Math.min(stepIndex + 1, STEPS.length)).padStart(2, '0')}/{String(STEPS.length).padStart(2, '0')}
+          </span>
           <button className="btn" onClick={next} disabled={done || running}>
             Next step
           </button>
@@ -178,6 +184,9 @@ export default function HandshakeSim() {
             Reset
           </button>
         </div>
+      </div>
+      <div className="progress-track">
+        <div className="progress-fill" style={{ width: `${(stepIndex / STEPS.length) * 100}%` }} />
       </div>
       <div className="sim-body">
         <ol className="timeline">

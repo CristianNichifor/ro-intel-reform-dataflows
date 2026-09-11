@@ -37,25 +37,56 @@ const PRINCIPLES: Array<[string, string]> = [
   ['De-militarized civilian agencies', 'Flows terminate in civilian authority chains (Government / Parliament / Justice)'],
 ]
 
+function parseHash(): View {
+  const view = window.location.hash.replace(/^#\/?/, '') as View
+  return NAV.some((item) => item.id === view) ? view : 'overview'
+}
+
 function Overview() {
   return (
-    <div className="overview">
-      <section className="card">
+    <div className="shell">
+      <section className="card accent-left">
+        <p className="section-label">Mission</p>
         <h2>Romanian Intelligence Reform — Data-Flow Architecture</h2>
         <p>
           Interactive demo of the <strong>current</strong> and <strong>target-state</strong>{' '}
           information data flows between Romania&apos;s intelligence, oversight, judicial and
-          civilian institutions. Based on the technical architecture specification in{' '}
-          <code>docs/</code>.
+          civilian institutions — built as a technical companion to the reform blueprint for
+          public debate.
         </p>
         <p className="muted">
           Everything runs in the browser. Warrant tokens use a mock HMAC-SHA-256 signature as a
           stand-in for the spec&apos;s Ed25519, and the audit ledger is a real append-only
-          hash-chain (SHA-256, verifiable on the Oversight tab).
+          hash-chain (SHA-256, verifiable on the Oversight tab). The full specification lives in{' '}
+          <code>docs/</code>.
         </p>
       </section>
 
+      <div className="stat-row">
+        <div className="stat">
+          <div className="stat-value">{currentActors.length}</div>
+          <div className="stat-label">Current actors</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value">{currentFlows.length}</div>
+          <div className="stat-label">Current flows</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value">{targetActors.length}</div>
+          <div className="stat-label">Target actors</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value">{targetFlows.length}</div>
+          <div className="stat-label">Target flows</div>
+        </div>
+        <div className="stat">
+          <div className="stat-value ok">{currentFlows.filter((f) => f.audit === 'Very low' || f.audit === 'None').length}</div>
+          <div className="stat-label">Baseline high-risk flows</div>
+        </div>
+      </div>
+
       <section className="card">
+        <p className="section-label">Principles</p>
         <h3>Design principles</h3>
         <table className="kv-table wide">
           <thead>
@@ -71,8 +102,8 @@ function Overview() {
 
       <div className="dash-grid">
         <section className="card">
+          <p className="section-label">Baseline</p>
           <h3>Current state (pre-reform)</h3>
-          <p>{currentActors.length} actors · {currentFlows.length} flows</p>
           <ul className="plain-list">
             <li>SRI receives, stores and correlates data without a unified warrant ledger</li>
             <li>CSAT coordinates with limited transparency</li>
@@ -82,8 +113,8 @@ function Overview() {
           </ul>
         </section>
         <section className="card">
+          <p className="section-label">Reform</p>
           <h3>Target state (post-reform)</h3>
-          <p>{targetActors.length} actors · {targetFlows.length} flows</p>
           <ul className="plain-list">
             <li>Hub-and-spoke: agency case vaults around a stateless IADE broker</li>
             <li>SSC warrant tokens gate every content transfer</li>
@@ -95,7 +126,8 @@ function Overview() {
       </div>
 
       <section className="card">
-        <h3>How to explore</h3>
+        <p className="section-label">Tour</p>
+        <h3>Suggested route through the demo</h3>
         <ol className="plain-list">
           <li><strong>Current State</strong> — click nodes and edges to inspect the baseline pathologies.</li>
           <li><strong>Target State</strong> — the hub-and-spoke architecture with warrant tokens.</li>
@@ -109,11 +141,19 @@ function Overview() {
 }
 
 export default function App() {
-  const [view, setView] = useState<View>('overview')
+  const [view, setView] = useState<View>(parseHash)
 
   useEffect(() => {
     void seedLedger()
+    const onHash = () => setView(parseHash())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
   }, [])
+
+  function navigate(next: View) {
+    window.location.assign(`#/${next}`)
+    setView(next)
+  }
 
   let content: React.ReactNode
   switch (view) {
@@ -141,24 +181,41 @@ export default function App() {
 
   return (
     <div className="app">
+      <div className="class-strip">
+        <span className="live-dot" />
+        <span>DEMO // UNCLASSIFIED</span>
+        <span className="spacer" />
+        <span>SIMULATED DATA — NO REAL SYSTEMS</span>
+      </div>
       <header className="app-header">
-        <div className="app-title">
-          <h1>RO Intel Reform · Data Flows</h1>
-          <span className="muted">demo — no real data</span>
+        <div className="header-row">
+          <div className="app-title">
+            <div className="kicker">RO · Intel Reform</div>
+            <h1>Information Data Flows</h1>
+          </div>
+          <span className="header-meta">v0.1 · in-browser simulation · MIT</span>
         </div>
         <nav className="app-nav">
-          {NAV.map((item) => (
+          {NAV.map((item, index) => (
             <button
               key={item.id}
               className={view === item.id ? 'nav-btn active' : 'nav-btn'}
-              onClick={() => setView(item.id)}
+              onClick={() => navigate(item.id)}
             >
+              <span className="idx">{String(index).padStart(2, '0')}</span>
               {item.label}
             </button>
           ))}
         </nav>
       </header>
       <main className="app-main">{content}</main>
+      <footer className="app-footer">
+        <span>ro-intel-reform-dataflows</span>
+        <a href="https://github.com/CristianNichifor/ro-intel-reform-dataflows" target="_blank" rel="noreferrer">
+          source ↗
+        </a>
+        <span>no real data · no real systems · no legal advice</span>
+      </footer>
     </div>
   )
 }

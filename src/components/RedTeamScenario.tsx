@@ -30,6 +30,8 @@ const STEPS: Step[] = [
   { actor: 'IG + ITAP', title: 'Alerted by the audit ledger', detail: 'The rejected attempt is permanently visible to independent oversight. No content ever moved.' },
 ]
 
+const FAILED_STEPS = new Set([2, 4])
+
 export default function RedTeamScenario() {
   const [stepIndex, setStepIndex] = useState(0)
   const stepRef = useRef(0)
@@ -124,10 +126,16 @@ export default function RedTeamScenario() {
   }
 
   return (
-    <div className="sim redteam">
+    <div className="sim redteam shell">
       <div className="sim-head">
-        <h2>Red-Team Scenario · Blocked Mass Query</h2>
+        <div>
+          <p className="section-label">Live Simulation</p>
+          <h2>Red-Team Scenario · Blocked Mass Query</h2>
+        </div>
         <div className="sim-actions">
+          <span className="sim-progress">
+            STEP {String(Math.min(stepIndex + 1, STEPS.length)).padStart(2, '0')}/{String(STEPS.length).padStart(2, '0')}
+          </span>
           <button className="btn" onClick={next} disabled={done || running}>
             Next step
           </button>
@@ -138,6 +146,9 @@ export default function RedTeamScenario() {
             Reset
           </button>
         </div>
+      </div>
+      <div className="progress-track">
+        <div className="progress-fill" style={{ width: `${(stepIndex / STEPS.length) * 100}%` }} />
       </div>
       {blocked && (
         <div className="outcome-banner">
@@ -151,7 +162,13 @@ export default function RedTeamScenario() {
             <li
               key={step.title}
               className={
-                index < stepIndex ? 'done' : index === stepIndex ? 'current' : 'pending'
+                index < stepIndex
+                  ? FAILED_STEPS.has(index)
+                    ? 'failed'
+                    : 'done'
+                  : index === stepIndex
+                    ? 'current'
+                    : 'pending'
               }
             >
               <div className="timeline-actor">{step.actor}</div>

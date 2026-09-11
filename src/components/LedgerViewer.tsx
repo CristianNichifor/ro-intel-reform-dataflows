@@ -11,9 +11,12 @@ export default function LedgerViewer() {
   }, [ledger])
 
   return (
-    <div className="ledger-viewer">
+    <div className="ledger-viewer shell">
       <div className="sim-head">
-        <h2>IADE Audit Ledger (append-only, hash-chained)</h2>
+        <div>
+          <p className="section-label">Immutable Record</p>
+          <h2>IADE Audit Ledger · append-only hash chain</h2>
+        </div>
         <div className="sim-actions">
           <span className={`integrity-pill ${integrity?.valid === false ? 'bad' : 'ok'}`}>
             {integrity ? (integrity.valid ? 'Chain intact' : `Chain broken at entry ${integrity.brokenAt}`) : 'Verifying…'}
@@ -48,7 +51,9 @@ export default function LedgerViewer() {
                 <td>{entry.initiator}</td>
                 <td>{entry.receiver}</td>
                 <td className="mono">{entry.tokenId ?? '—'}</td>
-                <td>{entry.status}</td>
+                <td>
+                  <span className={`status-pill ${entry.status}`}>{entry.status}</span>
+                </td>
                 <td>{entry.note}</td>
                 <td className="mono">{shortHash(entry.entryHash)}</td>
               </tr>

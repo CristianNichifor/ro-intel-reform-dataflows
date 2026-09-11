@@ -34,34 +34,41 @@ export default function OversightDashboard() {
   const rejectedEntries = ledger.filter((entry) => entry.status === 'rejected')
 
   return (
-    <div className="dashboard">
-      <div className="kpi-row">
-        <div className="kpi">
-          <div className="kpi-value">{ledger.length}</div>
-          <div className="kpi-label">Ledger entries</div>
+    <div className="dashboard shell">
+      <div className="sim-head">
+        <div>
+          <p className="section-label">Oversight View</p>
+          <h2>Aggregated Metrics · IADE Audit Ledger</h2>
         </div>
-        <div className="kpi">
-          <div className="kpi-value ok">{metrics.accepted}</div>
-          <div className="kpi-label">Accepted</div>
+      </div>
+      <div className="stat-row">
+        <div className="stat">
+          <div className="stat-value">{ledger.length}</div>
+          <div className="stat-label">Ledger entries</div>
         </div>
-        <div className="kpi">
-          <div className="kpi-value bad">{metrics.rejected}</div>
-          <div className="kpi-label">Rejected</div>
+        <div className="stat">
+          <div className="stat-value ok">{metrics.accepted}</div>
+          <div className="stat-label">Accepted</div>
         </div>
-        <div className="kpi">
-          <div className="kpi-value">{metrics.tokenCount}</div>
-          <div className="kpi-label">Distinct warrant tokens</div>
+        <div className="stat">
+          <div className="stat-value bad">{metrics.rejected}</div>
+          <div className="stat-label">Rejected</div>
         </div>
-        <div className="kpi">
-          <div className={`kpi-value ${integrity?.valid === false ? 'bad' : 'ok'}`}>
-            {integrity ? (integrity.valid ? 'INTACT' : `BROKEN @ ${integrity.brokenAt}`) : '…'}
+        <div className="stat">
+          <div className="stat-value">{metrics.tokenCount}</div>
+          <div className="stat-label">Warrant tokens</div>
+        </div>
+        <div className="stat">
+          <div className={`stat-value ${integrity?.valid === false ? 'bad' : 'ok'}`}>
+            {integrity ? (integrity.valid ? 'INTACT' : `BROKEN@${integrity.brokenAt}`) : '…'}
           </div>
-          <div className="kpi-label">Hash-chain integrity</div>
+          <div className="stat-label">Hash-chain integrity</div>
         </div>
       </div>
 
       <div className="dash-grid">
         <section className="card">
+          <p className="section-label">Volume</p>
           <h3>Transactions by flow type</h3>
           {metrics.flowBars.map(([flow, count]) => (
             <div className="bar-row" key={flow}>
@@ -75,7 +82,8 @@ export default function OversightDashboard() {
         </section>
 
         <section className="card">
-          <h3>Rejection events (oversight view)</h3>
+          <p className="section-label">Anomalies</p>
+          <h3>Rejection events</h3>
           {rejectedEntries.length === 0 && <p className="muted">No rejected transactions on the ledger.</p>}
           {rejectedEntries.map((entry) => (
             <div className="rejection" key={entry.id}>
@@ -90,7 +98,8 @@ export default function OversightDashboard() {
       </div>
 
       <section className="card">
-        <h3>Oversight access model</h3>
+        <p className="section-label">Access Model</p>
+        <h3>Oversight access matrix</h3>
         <table className="kv-table wide">
           <thead>
             <tr>
