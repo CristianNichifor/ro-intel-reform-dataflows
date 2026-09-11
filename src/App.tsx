@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ComparisonPanel from './components/ComparisonPanel'
 import FlowExplorer from './components/FlowExplorer'
 import GlossedText from './components/GlossedText'
+import GovernancePanel from './components/GovernancePanel'
 import HandshakeSim from './components/HandshakeSim'
 import LedgerViewer from './components/LedgerViewer'
 import OversightDashboard from './components/OversightDashboard'
@@ -22,6 +23,7 @@ type View =
   | 'dashboard'
   | 'ledger'
   | 'compare'
+  | 'governance'
 
 const NAV: Array<{ id: View; labelKey: MessageKey }> = [
   { id: 'overview', labelKey: 'nav.overview' },
@@ -32,6 +34,7 @@ const NAV: Array<{ id: View; labelKey: MessageKey }> = [
   { id: 'dashboard', labelKey: 'nav.oversight' },
   { id: 'ledger', labelKey: 'nav.ledger' },
   { id: 'compare', labelKey: 'nav.compare' },
+  { id: 'governance', labelKey: 'nav.governance' },
 ]
 
 function parseHash(): View {
@@ -206,6 +209,9 @@ export default function App() {
       break
     case 'compare':
       content = <ComparisonPanel />
+      break
+    case 'governance':
+      content = <GovernancePanel />
       break
     default:
       content = <Overview />

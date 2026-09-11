@@ -18,6 +18,20 @@ const en = {
   'nav.oversight': 'Oversight',
   'nav.ledger': 'Audit Ledger',
   'nav.compare': 'Compare',
+  'nav.governance': 'Governance',
+  'gov.title': 'Governance & Personnel Integrity',
+  'gov.subtitle':
+    'DCAF-based control layer — who runs the system, how they are appointed, and how power is prevented from being captured',
+  'gov.intro':
+    'The data-flow layer (docs 00–07) answers "how does data flow between institutions?". This layer answers "who controls the system" — appointment, conflict of interest, cooling-off, civil-society oversight and internal control, built on the DCAF framework as the authoritative reference.',
+  'gov.langNote':
+    'This tab renders the repository files directly. Full text: docs/14–19 (English), diagrams/*.mmd, schemas/*.json.',
+  'gov.section.diagrams': 'Diagrams',
+  'gov.section.docs': 'Specification — docs 14–19',
+  'gov.diagram.appointment': 'Leadership appointment — depoliticized selection & confirmation',
+  'gov.diagram.layering': 'Oversight layering — five accountability layers',
+  'gov.diagram.coolingoff': 'Cooling-off enforcement',
+  'gov.diagram.conflict': 'Conflict-of-interest annual cycle',
   'lang.toggle': 'Language',
   'section.mission': 'Mission',
   'section.principles': 'Principles',
@@ -297,6 +311,20 @@ const ro: Record<MessageKey, string> = {
   'nav.oversight': 'Supraveghere',
   'nav.ledger': 'Registru audit',
   'nav.compare': 'Comparație',
+  'nav.governance': 'Guvernanță',
+  'gov.title': 'Guvernanță și integritate',
+  'gov.subtitle':
+    'Stratul de control bazat pe DCAF — cine conduce sistemul, cum sunt numiți și cum se previne capturarea puterii',
+  'gov.intro':
+    'Stratul fluxurilor de date (docs 00–07) răspunde la „cum circulă datele între instituții?". Acest strat răspunde la „cine controlează sistemul" — numirea conducerii, conflictele de interese, restricțiile post-mandat, supravegherea societății civile și controlul intern, construite pe cadrul DCAF ca referință autoritară.',
+  'gov.langNote':
+    'Această filă redă direct fișierele din repo. Text integral: docs/14–19 (în engleză), diagrams/*.mmd, schemas/*.json.',
+  'gov.section.diagrams': 'Diagrame',
+  'gov.section.docs': 'Specificație — docs 14–19',
+  'gov.diagram.appointment': 'Numirea conducerii — selecție și confirmare depolitizate',
+  'gov.diagram.layering': 'Supravegherea pe straturi — cinci niveluri de răspundere',
+  'gov.diagram.coolingoff': 'Aplicarea restricțiilor post-mandat',
+  'gov.diagram.conflict': 'Ciclul anual al conflictelor de interese',
   'lang.toggle': 'Limbă',
   'section.mission': 'Misiune',
   'section.principles': 'Principii',
