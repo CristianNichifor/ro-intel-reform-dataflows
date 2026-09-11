@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cristiannichifor.github.io/ro-intel-reform-dataflows/schemas/leadership-nomination.schema.json",
+  "title": "LeadershipNomination",
+  "description": "DEMO // UNCLASSIFIED - SIMULATED DATA - NO REAL SYSTEMS. Full record of a depoliticized nomination for SRI/SIE Director or Deputy (doc 14).",
+  "type": "object",
+  "required": [
+    "nomination_id",
+    "position",
+    "candidate",
+    "qualifications",
+    "prior_political_roles",
+    "political_inactivity_period_years",
+    "security_clearance",
+    "asset_declaration",
+    "committee_recommendation",
+    "jpc_hearing",
+    "confirmation_vote"
+  ],
+  "properties": {
+    "nomination_id": { "type": "string", "format": "uuid" },
+    "position": {
+      "type": "string",
+      "enum": ["SRI_director", "SRI_deputy", "SIE_director", "SIE_deputy"]
+    },
+    "candidate": {
+      "type": "object",
+      "required": ["candidate_id", "full_name", "date_of_birth", "citizenship"],
+      "properties": {
+        "candidate_id": { "type": "string", "format": "uuid" },
+        "full_name": { "type": "string" },
+        "date_of_birth": { "type": "string", "format": "date" },
+        "citizenship": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "qualifications": {
+      "type": "object",
+      "required": ["years_relevant_experience", "education", "languages"],
+      "properties": {
+        "years_relevant_experience": { "type": "integer", "minimum": 15 },
+        "education": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "languages": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "professional_record": { "type": "string" }
+      }
+    },
+    "prior_political_roles": {
+      "type": "array",
+      "description": "Party offices, elected mandates and political-appointee roles held in the last 10 years. Eligibility requires an empty array.",
+      "items": {
+        "type": "object",
+        "required": ["role", "institution", "start_date", "end_date"],
+        "properties": {
+          "role": { "type": "string" },
+          "institution": { "type": "string" },
+          "start_date": { "type": "string", "format": "date" },
+          "end_date": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "political_inactivity_period_years": {
+      "type": "integer",
+      "minimum": 5,
+      "description": "Years since last party membership or elected office (North Macedonia model)"
+    },
+    "security_clearance": {
+      "type": "object",
+      "required": ["level", "status", "issued_by", "valid_until"],
+      "properties": {
+        "level": { "type": "string", "enum": ["TS_SCI", "TS", "S"] },
+        "status": { "type": "string", "enum": ["active", "pending", "denied"] },
+        "issued_by": { "type": "string" },
+        "valid_until": { "type": "string", "format": "date" }
+      }
+    },
+    "asset_declaration": {
+      "type": "object",
+      "required": ["declaration_id", "filing_date", "verified_by_ANI"],
+      "properties": {
+        "declaration_id": { "type": "string", "format": "uuid" },
+        "filing_date": { "type": "string", "format": "date" },
+        "verified_by_ANI": { "type": "boolean" },
+        "verification_date": { "type": "string", "format": "date" }
+      }
+    },
+    "committee_recommendation": {
+      "type": "object",
+      "required": ["committee_id", "recommendation", "votes_for", "votes_against", "date"],
+      "properties": {
+        "committee_id": { "type": "string" },
+        "recommendation": { "type": "string", "enum": ["recommended", "not_recommended"] },
+        "votes_for": { "type": "integer", "minimum": 0 },
+        "votes_against": { "type": "integer", "minimum": 0 },
+        "date": { "type": "string", "format": "date" }
+      }
+    },
+    "jpc_hearing": {
+      "type": "object",
+      "required": ["hearing_date", "public", "transcript_id"],
+      "properties": {
+        "hearing_date": { "type": "string", "format": "date-time" },
+        "public": { "type": "boolean" },
+        "transcript_id": { "type": "string", "format": "uuid" },
+        "written_answers_id": { "type": "string", "format": "uuid" }
+      }
+    },
+    "confirmation_vote": {
+      "type": "object",
+      "required": ["votes_for", "votes_against", "abstentions", "passed", "date"],
+      "properties": {
+        "votes_for": { "type": "integer", "minimum": 0 },
+        "votes_against": { "type": "integer", "minimum": 0 },
+        "abstentions": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "boolean" },
+        "date": { "type": "string", "format": "date" }
+      }
+    },
+    "term": {
+      "type": "object",
+      "properties": {
+        "years": { "const": 5 },
+        "renewals_allowed": { "const": 1 },
+        "start_date": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cristiannichifor.github.io/ro-intel-reform-dataflows/schemas/cooling-off-compliance-report.schema.json",
+  "title": "CoolingOffComplianceReport",
+  "description": "DEMO // UNCLASSIFIED - SIMULATED DATA - NO REAL SYSTEMS. Aggregated annual cooling-off compliance report laid before the JPC and published publicly (doc 16).",
+  "type": "object",
+  "required": [
+    "report_id",
+    "reporting_year",
+    "issued_by",
+    "aggregates",
+    "enforcement",
+    "publication"
+  ],
+  "properties": {
+    "report_id": { "type": "string", "format": "uuid" },
+    "reporting_year": { "type": "integer", "minimum": 2026 },
+    "issued_by": { "const": "Inspector_General" },
+    "aggregates": {
+      "type": "object",
+      "required": [
+        "departures_total",
+        "notifications_filed",
+        "approved",
+        "denied",
+        "conditional",
+        "pending"
+      ],
+      "properties": {
+        "departures_total": { "type": "integer", "minimum": 0 },
+        "notifications_filed": { "type": "integer", "minimum": 0 },
+        "approved": { "type": "integer", "minimum": 0 },
+        "denied": { "type": "integer", "minimum": 0 },
+        "conditional": { "type": "integer", "minimum": 0 },
+        "pending": { "type": "integer", "minimum": 0 },
+        "by_tier": {
+          "type": "object",
+          "properties": {
+            "T1": { "type": "integer", "minimum": 0 },
+            "T2": { "type": "integer", "minimum": 0 },
+            "T3": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "by_sector": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "required": [
+        "investigations_opened",
+        "violations_confirmed",
+        "pension_reductions",
+        "remuneration_recoveries_eur",
+        "criminal_referrals"
+      ],
+      "properties": {
+        "investigations_opened": { "type": "integer", "minimum": 0 },
+        "violations_confirmed": { "type": "integer", "minimum": 0 },
+        "pension_reductions": { "type": "integer", "minimum": 0 },
+        "remuneration_recoveries_eur": { "type": "number", "minimum": 0 },
+        "criminal_referrals": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "anomalies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["anomaly_id", "nature", "disposition"],
+        "properties": {
+          "anomaly_id": { "type": "string", "format": "uuid" },
+          "nature": { "type": "string" },
+          "disposition": {
+            "type": "string",
+            "enum": ["closed", "referred", "monitoring"]
+          }
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "required": ["published", "public_url"],
+      "properties": {
+        "published": { "type": "boolean" },
+        "public_url": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}

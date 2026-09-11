@@ -1,0 +1,11 @@
+flowchart TD
+    DEP[Pre-departure declaration filed 30 days before exit] --> IGR[IG review of intended destination]
+    IGR --> DB[Entry in IG employment database]
+    DB --> PROC[Cross-check against procurement records]
+    PROC --> DEC{Compliance decision}
+    DEC -->|Approved| MON[Continued monitoring for cooling-off term]
+    DEC -->|Denied or violation found| CON[Consequences]
+    CON --> P1[Pension reduction or suspension]
+    CON --> P2[Recovery of remuneration from prohibited employer]
+    CON --> P3[Criminal referral for false declaration]
+    MON --> REP[Annual public compliance report to JPC]

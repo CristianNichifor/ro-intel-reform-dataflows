@@ -1,0 +1,12 @@
+flowchart TD
+    D[Annual declaration filed by all officials] --> IGR[IG completeness review]
+    IGR --> RA{Random audit selected?}
+    RA -->|Yes| AUD[Full audit: ANI and procurement cross-checks]
+    RA -->|No| REN[Clearance renewed]
+    AUD --> RF{Red flag?}
+    RF -->|No| REN
+    RF -->|Yes| INV[IG investigation]
+    INV --> CON{Violation confirmed?}
+    CON -->|No| REN
+    CON -->|Yes| ACT[Removal or criminal referral]
+    REN -->|Next cycle| D

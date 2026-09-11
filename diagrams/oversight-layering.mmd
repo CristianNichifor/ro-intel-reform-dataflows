@@ -1,0 +1,36 @@
+flowchart TD
+    subgraph INT["Internal control layer"]
+        IG[Inspector General]
+        IA[Internal audit unit]
+        WB[Whistleblower channel]
+    end
+    subgraph EXE["Executive layer"]
+        CSAT[CSAT]
+        GOV[Government]
+    end
+    subgraph PAR["Parliamentary layer"]
+        JPC[Joint Parliamentary Committee]
+        ITAP[ITAP technical panel]
+    end
+    subgraph JUD["Judicial layer"]
+        SSC[Specialized Surveillance Court]
+        ICCJ[ICCJ]
+    end
+    subgraph PUB["Public layer"]
+        CSO[Civil society organisations]
+        MED[Media]
+        ACA[Academia]
+    end
+    AG[Services: SRI, SIE, STS, SPP, DNSC]
+    IA -->|reports to| IG
+    WB -->|protected channel| IG
+    AG -->|operational supervision| CSAT
+    CSAT -->|accountability to Parliament| JPC
+    IG -->|audit findings| JPC
+    ITAP -->|technical validation| JPC
+    AG -->|warrant requests| SSC
+    SSC -->|warrant tokens| AG
+    SSC -->|appeals| ICCJ
+    JPC -->|unclassified reports| PUB
+    PUB -->|scrutiny and contestation| JPC
+    CSO -->|researcher protection requests| IG

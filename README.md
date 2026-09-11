@@ -21,6 +21,20 @@ to the Romanian Intelligence Reform Policy Blueprint.
 | **Audit Ledger** | The live append-only ledger (real SHA-256 hash chain, in-browser) |
 | **Compare** | Detailed now-vs-proposal: institution by institution, weaknesses/benefits/risks, EU & world benchmarks |
 
+## Two layers
+
+The repo now covers both halves of the reform blueprint:
+
+1. **Data-flow architecture** (`docs/00`–`docs/07`) — *how information moves*: flows C1–C10 and
+   T1–T20, warrant tokens, IADE, audit ledger.
+2. **Governance & personnel-integrity architecture** (`docs/14`–`docs/19`, `schemas/*.json`,
+   `diagrams/*.mmd`) — *who controls the system*: DCAF-based rules for leadership appointment,
+   conflict of interest, cooling-off, civil-society oversight and internal control.
+
+Together they form a complete democratic intelligence reform blueprint: the data-flow layer defines
+what the system does; the governance layer defines who may run it, under what constraints, and who
+checks them.
+
 ## Quick start
 
 ```bash

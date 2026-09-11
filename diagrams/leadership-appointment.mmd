@@ -1,0 +1,11 @@
+flowchart TD
+    V[Vacancy or end of term] --> CN[Public call for nominations]
+    CN --> SC[Independent Selection Committee screens candidates]
+    SC --> S[Shortlist of 3 to 5 candidates]
+    S --> JPC[JPC public hearing with sworn testimony]
+    JPC --> VOTE[Binding confirmation vote in joint sitting]
+    VOTE --> PASS{Vote passed?}
+    PASS -->|No - back to shortlist| S
+    PASS -->|Yes| RES[Parliamentary resolution adopted]
+    RES --> APP[Appointment by CSAT within 15 days]
+    APP --> TERM[Fixed 5-year term, one renewal]

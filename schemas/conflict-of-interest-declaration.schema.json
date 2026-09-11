@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cristiannichifor.github.io/ro-intel-reform-dataflows/schemas/conflict-of-interest-declaration.schema.json",
+  "title": "ConflictOfInterestDeclaration",
+  "description": "DEMO // UNCLASSIFIED - SIMULATED DATA - NO REAL SYSTEMS. Annual conflict-of-interest declaration filed with the IG (doc 15).",
+  "type": "object",
+  "required": [
+    "declaration_id",
+    "declarant",
+    "year",
+    "financial_interests",
+    "external_roles",
+    "foreign_contacts",
+    "political_activity",
+    "certification"
+  ],
+  "properties": {
+    "declaration_id": { "type": "string", "format": "uuid" },
+    "declarant": {
+      "type": "object",
+      "required": ["full_name", "position", "agency"],
+      "properties": {
+        "full_name": { "type": "string" },
+        "position": { "type": "string" },
+        "agency": {
+          "type": "string",
+          "enum": ["SRI", "SIE", "STS", "SPP", "DNSC", "CSAT_staff"]
+        }
+      }
+    },
+    "year": { "type": "integer", "minimum": 2026 },
+    "financial_interests": {
+      "type": "object",
+      "required": ["holdings", "immediate_family_holdings", "crypto", "gifts"],
+      "properties": {
+        "holdings": { "type": "array", "items": { "$ref": "#/$defs/holding" } },
+        "immediate_family_holdings": { "type": "array", "items": { "$ref": "#/$defs/holding" } },
+        "crypto": { "type": "array", "items": { "$ref": "#/$defs/holding" } },
+        "gifts": { "type": "array", "items": { "$ref": "#/$defs/gift" } }
+      }
+    },
+    "external_roles": {
+      "type": "object",
+      "required": ["employment", "academic_affiliations", "board_memberships"],
+      "properties": {
+        "employment": { "type": "array", "items": { "$ref": "#/$defs/external_role" } },
+        "academic_affiliations": { "type": "array", "items": { "$ref": "#/$defs/external_role" } },
+        "board_memberships": { "type": "array", "items": { "$ref": "#/$defs/external_role" } }
+      }
+    },
+    "foreign_contacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entity", "country", "nature", "last_contact"],
+        "properties": {
+          "entity": { "type": "string" },
+          "country": { "type": "string" },
+          "nature": {
+            "type": "string",
+            "enum": ["official", "business", "personal", "financial"]
+          },
+          "last_contact": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "political_activity": {
+      "type": "object",
+      "required": ["party_membership", "campaign_contributions"],
+      "properties": {
+        "party_membership": { "type": "boolean" },
+        "party_name": { "type": "string" },
+        "public_statements": { "type": "array", "items": { "type": "string" } },
+        "campaign_contributions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "information_exploitation": {
+      "type": "object",
+      "description": "Self-report of any use of classified information outside authorized channels",
+      "properties": {
+        "unauthorized_access": { "type": "boolean" },
+        "leak_suspicion": { "type": "boolean" },
+        "details": { "type": "string" }
+      }
+    },
+    "certification": {
+      "type": "object",
+      "required": ["certified_by", "date", "truthful"],
+      "properties": {
+        "certified_by": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "truthful": { "const": true },
+        "penalty_clause": {
+          "const": "False declarations constitute a criminal offence (Art. 326 Criminal Code) and trigger mandatory removal proceedings."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "holding": {
+      "type": "object",
+      "required": ["asset_type", "issuer", "value_band", "acquired"],
+      "properties": {
+        "asset_type": {
+          "type": "string",
+          "enum": ["equity", "debt", "fund", "real_estate", "crypto", "other"]
+        },
+        "issuer": { "type": "string" },
+        "value_band": {
+          "type": "string",
+          "enum": ["lt_10k", "10k_50k", "50k_100k", "gt_100k"]
+        },
+        "acquired": { "type": "string", "format": "date" }
+      }
+    },
+    "gift": {
+      "type": "object",
+      "required": ["description", "donor", "value_eur", "date"],
+      "properties": {
+        "description": { "type": "string" },
+        "donor": { "type": "string" },
+        "value_eur": { "type": "number", "minimum": 0 },
+        "date": { "type": "string", "format": "date" }
+      }
+    },
+    "external_role": {
+      "type": "object",
+      "required": ["institution", "role", "compensated", "since"],
+      "properties": {
+        "institution": { "type": "string" },
+        "role": { "type": "string" },
+        "compensated": { "type": "boolean" },
+        "since": { "type": "string", "format": "date" },
+        "approved_by": { "type": "string" }
+      }
+    }
+  }
+}

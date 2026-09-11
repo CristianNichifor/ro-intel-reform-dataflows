@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cristiannichifor.github.io/ro-intel-reform-dataflows/schemas/post-employment-notification.schema.json",
+  "title": "PostEmploymentNotification",
+  "description": "DEMO // UNCLASSIFIED - SIMULATED DATA - NO REAL SYSTEMS. Pre-departure declaration for a departing official under the cooling-off regime (doc 16).",
+  "type": "object",
+  "required": [
+    "notification_id",
+    "departing_official",
+    "departure_date",
+    "intended_destination",
+    "cooling_off",
+    "ig_review"
+  ],
+  "properties": {
+    "notification_id": { "type": "string", "format": "uuid" },
+    "departing_official": {
+      "type": "object",
+      "required": ["full_name", "position", "agency", "tier"],
+      "properties": {
+        "full_name": { "type": "string" },
+        "position": { "type": "string" },
+        "agency": {
+          "type": "string",
+          "enum": ["SRI", "SIE", "STS", "SPP", "DNSC", "CSAT_staff"]
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["T1_director_deputy", "T2_department_head", "T3_operational_staff"]
+        }
+      }
+    },
+    "departure_date": { "type": "string", "format": "date" },
+    "intended_destination": {
+      "type": "object",
+      "required": ["entity", "country", "sector", "role"],
+      "properties": {
+        "entity": { "type": "string" },
+        "country": { "type": "string" },
+        "sector": {
+          "type": "string",
+          "enum": ["private", "public", "ngo", "academia", "foreign_intelligence", "media", "other"]
+        },
+        "role": { "type": "string" },
+        "lobbying_for_foreign_government": { "type": "boolean" }
+      }
+    },
+    "cooling_off": {
+      "type": "object",
+      "required": ["tier", "months_required", "lifetime_ban_foreign_intel"],
+      "properties": {
+        "tier": {
+          "type": "string",
+          "enum": ["T1_director_deputy", "T2_department_head", "T3_operational_staff"]
+        },
+        "months_required": { "type": "integer", "enum": [24, 12, 6] },
+        "lifetime_ban_foreign_intel": { "type": "boolean" }
+      }
+    },
+    "ig_review": {
+      "type": "object",
+      "required": ["reviewed_by", "review_date", "status"],
+      "properties": {
+        "reviewed_by": { "type": "string" },
+        "review_date": { "type": "string", "format": "date" },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "denied", "conditional"]
+        },
+        "decision_id": { "type": "string", "format": "uuid" },
+        "conditions": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
