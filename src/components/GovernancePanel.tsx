@@ -18,6 +18,30 @@ import diagConflict from '../../diagrams/conflict-of-interest-cycle.mmd?raw'
 
 const md = new MarkdownIt({ html: false, linkify: true })
 
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  securityLevel: 'loose',
+  fontFamily: '"IBM Plex Sans", system-ui, sans-serif',
+  flowchart: { curve: 'basis', padding: 12, nodeSpacing: 36, rankSpacing: 36, htmlLabels: true },
+  themeVariables: {
+    darkMode: true,
+    background: '#070d18',
+    fontFamily: '"IBM Plex Sans", system-ui, sans-serif',
+    fontSize: '14px',
+    primaryColor: '#0f1a2e',
+    primaryTextColor: '#dce5f5',
+    primaryBorderColor: '#38bdf8',
+    lineColor: '#7184a5',
+    secondaryColor: '#13213a',
+    tertiaryColor: '#1b2a45',
+    clusterBkg: '#0b1322',
+    clusterBorder: '#2b3f63',
+    edgeLabelBackground: '#070d18',
+    titleColor: '#dce5f5',
+  },
+})
+
 const DOCS: Array<{ key: string; source: string }> = [
   { key: '14 · Leadership Appointment', source: doc14 },
   { key: '15 · Conflict of Interest', source: doc15 },
@@ -46,12 +70,38 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
   const [failed, setFailed] = useState(false)
   const [view, setView] = useState({ zoom: 1, x: 0, y: 0 })
   const [dragging, setDragging] = useState(false)
+  const [boxSize, setBoxSize] = useState<{ w: number; h: number } | null>(null)
   const boxRef = useRef<HTMLDivElement>(null)
+  const hostRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null)
 
   useEffect(() => {
+    const box = boxRef.current
+    if (!box) return
+    const measure = () => setBoxSize({ w: box.clientWidth, h: box.clientHeight })
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(box)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const host = hostRef.current
+    const box = boxRef.current
+    const svgEl = host?.querySelector('svg')
+    if (!host || !svgEl || !box) return
+    const vb = svgEl.getAttribute('viewBox')?.split(' ').map(Number) ?? []
+    const aspect = vb.length === 4 && vb[3] > 0 ? vb[3] / vb[2] : 0.5
+    const width = box.clientWidth
+    const optimalH = Math.min(720, Math.max(260, Math.round(width * aspect)))
+    svgEl.removeAttribute('style')
+    svgEl.setAttribute('width', String(width))
+    svgEl.setAttribute('height', String(optimalH))
+    box.style.height = `${optimalH}px`
+  }, [svg, boxSize])
+
+  useEffect(() => {
     let cancelled = false
-    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' })
     mermaid
       .render(id, code)
       .then((result) => {
@@ -156,7 +206,7 @@ function MermaidDiagram({ id, code, title }: { id: string; code: string; title: 
           className="mermaid-zoomable"
           style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.zoom})` }}
         >
-          <div dangerouslySetInnerHTML={{ __html: svg }} />
+          <div ref={hostRef} className="mermaid-svg-host" dangerouslySetInnerHTML={{ __html: svg }} />
         </div>
       </div>
     </div>

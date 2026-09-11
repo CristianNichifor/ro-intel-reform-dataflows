@@ -1,4 +1,4 @@
-flowchart TD
+flowchart LR
     DEP[Pre-departure declaration filed 30 days before exit] --> IGR[IG review of intended destination]
     IGR --> DB[Entry in IG employment database]
     DB --> PROC[Cross-check against procurement records]
@@ -9,3 +9,12 @@ flowchart TD
     CON --> P2[Recovery of remuneration from prohibited employer]
     CON --> P3[Criminal referral for false declaration]
     MON --> REP[Annual public compliance report to JPC]
+
+    classDef step fill:#0f1a2e,stroke:#2b3f63,color:#dce5f5,stroke-width:1px;
+    classDef decide fill:#2a2410,stroke:#fbbf24,color:#fbbf24,stroke-width:1.5px;
+    classDef bad fill:#2a1016,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px;
+    classDef good fill:#0f2a20,stroke:#34d399,color:#a7f3d0,stroke-width:1.5px;
+    class DEP,IGR,DB,PROC step
+    class DEC decide
+    class CON,P1,P2,P3 bad
+    class MON,REP good
