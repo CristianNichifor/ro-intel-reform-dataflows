@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import ComparisonPanel from './components/ComparisonPanel'
 import FlowExplorer from './components/FlowExplorer'
 import GlossedText from './components/GlossedText'
 import HandshakeSim from './components/HandshakeSim'
@@ -20,6 +21,7 @@ type View =
   | 'redteam'
   | 'dashboard'
   | 'ledger'
+  | 'compare'
 
 const NAV: Array<{ id: View; labelKey: MessageKey }> = [
   { id: 'overview', labelKey: 'nav.overview' },
@@ -29,6 +31,7 @@ const NAV: Array<{ id: View; labelKey: MessageKey }> = [
   { id: 'redteam', labelKey: 'nav.redteam' },
   { id: 'dashboard', labelKey: 'nav.oversight' },
   { id: 'ledger', labelKey: 'nav.ledger' },
+  { id: 'compare', labelKey: 'nav.compare' },
 ]
 
 function parseHash(): View {
@@ -200,6 +203,9 @@ export default function App() {
       break
     case 'ledger':
       content = <LedgerViewer />
+      break
+    case 'compare':
+      content = <ComparisonPanel />
       break
     default:
       content = <Overview />

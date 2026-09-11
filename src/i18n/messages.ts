@@ -17,6 +17,7 @@ const en = {
   'nav.redteam': 'Red Team',
   'nav.oversight': 'Oversight',
   'nav.ledger': 'Audit Ledger',
+  'nav.compare': 'Compare',
   'lang.toggle': 'Language',
   'section.mission': 'Mission',
   'section.principles': 'Principles',
@@ -29,6 +30,7 @@ const en = {
   'section.anomalies': 'Anomalies',
   'section.accessModel': 'Access Model',
   'section.record': 'Immutable Record',
+  'section.comparison': 'Comparison',
   'overview.mission.title': 'Romanian Intelligence Reform — Data-Flow Architecture',
   'overview.mission.p1':
     "Interactive demo of the current and target-state information data flows between Romania's intelligence, oversight, judicial and civilian institutions — built as a technical companion to the reform blueprint for public debate.",
@@ -255,6 +257,26 @@ const en = {
   'warrant.noCase': 'no case ID linkage',
   'warrant.noJustification': 'justification missing or insufficient',
   'warrant.approved': 'predicate in scope, request specific, no less intrusive means available',
+  'compare.title': 'Now vs Proposal — Detailed Comparison',
+  'compare.intro':
+    'Institution-by-institution comparison with Romanian acronyms as the default, the weaknesses/benefits/risks of both architectures, and benchmarks against EU and world oversight systems. Full text: docs/07-now-vs-proposal.md.',
+  'compare.h.institution': 'Institution',
+  'compare.h.today': 'Today',
+  'compare.h.proposal': 'Proposal',
+  'compare.new': 'NEW',
+  'compare.swot.title': 'Weaknesses · Benefits · Risks',
+  'compare.swot.h.dimension': 'Dimension',
+  'compare.swot.h.current': 'Current architecture',
+  'compare.swot.h.proposal': 'Proposed architecture',
+  'compare.swot.weaknesses': 'Weaknesses',
+  'compare.swot.benefits': 'Benefits',
+  'compare.swot.risks': 'Risks',
+  'compare.intl.title': 'Benchmarks — EU & world oversight systems',
+  'compare.intl.note':
+    'How comparable systems authorize and oversee data flows. The proposal borrows the ex-ante judicial gate and the full-access inspector models; it rejects non-adversarial courts and bulk-collection carve-outs.',
+  'compare.intl.h.country': 'Country',
+  'compare.intl.h.model': 'Model / mechanism',
+  'compare.intl.h.lesson': 'Borrowed or rejected',
 } as const
 
 export type MessageKey = keyof typeof en
@@ -274,6 +296,7 @@ const ro: Record<MessageKey, string> = {
   'nav.redteam': 'Red Team',
   'nav.oversight': 'Supraveghere',
   'nav.ledger': 'Registru audit',
+  'nav.compare': 'Comparație',
   'lang.toggle': 'Limbă',
   'section.mission': 'Misiune',
   'section.principles': 'Principii',
@@ -286,6 +309,7 @@ const ro: Record<MessageKey, string> = {
   'section.anomalies': 'Anomalii',
   'section.accessModel': 'Model de acces',
   'section.record': 'Registru imutabil',
+  'section.comparison': 'Comparație',
   'overview.mission.title': 'Reforma serviciilor de informații din România — Arhitectura fluxurilor de date',
   'overview.mission.p1':
     'Demo interactivă a fluxurilor de date informaționale din starea actuală și starea țintă între instituțiile de informații, supraveghere, judiciare și civile din România — construită ca însoțitor tehnic al planului de reformă pentru dezbatere publică.',
@@ -512,6 +536,26 @@ const ro: Record<MessageKey, string> = {
   'warrant.noCase': 'lipsă legătura cu un ID de caz',
   'warrant.noJustification': 'justificare lipsă sau insuficientă',
   'warrant.approved': 'temei în sferă, cerere specifică, nu există mijloace mai puțin intruzive disponibile',
+  'compare.title': 'Acum vs Propunere — Comparație detaliată',
+  'compare.intro':
+    'Comparație instituție cu instituție, cu acronimele românești ca implicit, punctele slabe/beneficiile/riscurile ambelor arhitecturi și repere față de sistemele de supraveghere din UE și din lume. Textul complet: docs/ro/07-acum-vs-propunere.md.',
+  'compare.h.institution': 'Instituție',
+  'compare.h.today': 'Astăzi',
+  'compare.h.proposal': 'Propunerea',
+  'compare.new': 'NOU',
+  'compare.swot.title': 'Puncte slabe · Beneficii · Riscuri',
+  'compare.swot.h.dimension': 'Dimensiune',
+  'compare.swot.h.current': 'Arhitectura actuală',
+  'compare.swot.h.proposal': 'Arhitectura propusă',
+  'compare.swot.weaknesses': 'Puncte slabe',
+  'compare.swot.benefits': 'Beneficii',
+  'compare.swot.risks': 'Riscuri',
+  'compare.intl.title': 'Repere — sisteme de supraveghere din UE și din lume',
+  'compare.intl.note':
+    'Cum autorizează și supraveghează sisteme comparabile fluxurile de date. Propunerea împrumută poarta judiciară ex-ante și modelele de inspector cu acces complet; respinge instanțele necontradictoriale și excepțiile de colectare în masă.',
+  'compare.intl.h.country': 'Țara',
+  'compare.intl.h.model': 'Model / mecanism',
+  'compare.intl.h.lesson': 'Împrumutat sau respins',
 }
 
 export const MESSAGES: Record<Language, Record<MessageKey, string>> = { en, ro }

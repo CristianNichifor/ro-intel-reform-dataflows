@@ -1174,6 +1174,20 @@ h3 {
   color: var(--bad);
 }
 
+.pill-new {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  background: var(--accent-dim);
+  color: var(--accent);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 /* ---------- Tables on small screens ---------- */
 
 .table-scroll {

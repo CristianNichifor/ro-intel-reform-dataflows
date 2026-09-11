@@ -19,6 +19,7 @@ to the Romanian Intelligence Reform Policy Blueprint.
 | **Red Team** | An unauthorized mass query gets blocked twice and logged |
 | **Oversight** | Aggregated metrics + hash-chain integrity of the audit ledger |
 | **Audit Ledger** | The live append-only ledger (real SHA-256 hash chain, in-browser) |
+| **Compare** | Detailed now-vs-proposal: institution by institution, weaknesses/benefits/risks, EU & world benchmarks |
 
 ## Quick start
 
@@ -50,7 +51,8 @@ ro-intel-reform-dataflows/
 │   ├── 03-target-state-flows.md
 │   ├── 04-flow-specifications.md
 │   ├── 05-data-flow-matrix.md
-│   └── 06-glossary.md
+│   ├── 06-glossary.md
+│   └── 07-now-vs-proposal.md
 ├── docs/ro/                    # the same sections in Romanian
 ├── schemas/                    # JSON Schemas for the core objects
 │   ├── warrant-token.schema.json

@@ -19,6 +19,7 @@ tehnic al Planului de reformă a serviciilor de informații din România.
 | **Red Team** | O interogare masivă neautorizată este blocată de două ori și înregistrată |
 | **Supraveghere** | Metrici agregate + integritatea lanțului hash al registrului de audit |
 | **Registru audit** | Registrul append-only live (lanț hash SHA-256 real, în browser) |
+| **Comparație** | Acum vs propunere în detaliu: instituție cu instituție, puncte slabe/beneficii/riscuri, repere din UE și din lume |
 
 Aplicația este bilingvă (RO/EN) — comutatorul se află în antetul paginii.
 
@@ -52,7 +53,8 @@ ro-intel-reform-dataflows/
 │   ├── 03-target-state-flows.md
 │   ├── 04-flow-specifications.md
 │   ├── 05-data-flow-matrix.md
-│   └── 06-glossary.md
+│   ├── 06-glossary.md
+│   └── 07-now-vs-proposal.md
 ├── docs/ro/                    # aceleași secțiuni în limba română
 ├── schemas/                    # JSON Schema pentru obiectele de bază
 │   ├── warrant-token.schema.json
