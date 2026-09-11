@@ -10,6 +10,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import ActorNode from './ActorNode'
+import GlossedText from './GlossedText'
 import { buildGraph, type GraphMode } from '../lib/graph'
 import { currentActors, targetActors } from '../data/actors'
 import type { Actor, ActorCategory, ActorNodeData, Flow } from '../data/types'
@@ -59,12 +60,16 @@ function DetailPanel({ selection, onClose }: { selection: Selection; onClose: ()
             {rows.map(([key, value]) => (
               <tr key={key}>
                 <td>{key}</td>
-                <td>{value}</td>
+                <td><GlossedText text={value} /></td>
               </tr>
             ))}
           </tbody>
         </table>
-        {flow.description && <p className="detail-desc">{flow.description}</p>}
+        {flow.description && (
+          <p className="detail-desc">
+            <GlossedText text={flow.description} />
+          </p>
+        )}
       </div>
     )
   }
@@ -228,16 +233,22 @@ export default function FlowExplorer({ mode }: { mode: GraphMode }) {
     <div className="explorer">
       <Legend mode={mode} />
       <div className="explorer-toolbar">
-        <input
-          className="explorer-search"
-          type="search"
-          placeholder="filter actors…  (esc to clear)"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Escape') setQuery('')
-          }}
-        />
+        <div className="search-wrap">
+          <svg className="search-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" strokeWidth="2" strokeLinecap="round">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <line x1="15.5" y1="15.5" x2="21" y2="21" />
+          </svg>
+          <input
+            className="explorer-search"
+            type="search"
+            placeholder="filter actors…  (esc to clear)"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') setQuery('')
+            }}
+          />
+        </div>
         <div className="filter-chips">
           {CATEGORY_FILTERS.filter((filter) =>
             actors.some((actor) => actor.category === filter.id),

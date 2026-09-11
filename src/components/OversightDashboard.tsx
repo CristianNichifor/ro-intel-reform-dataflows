@@ -100,7 +100,8 @@ export default function OversightDashboard() {
       <section className="card">
         <p className="section-label">Access Model</p>
         <h3>Oversight access matrix</h3>
-        <table className="kv-table wide">
+        <div className="table-scroll">
+          <table className="kv-table wide">
           <thead>
             <tr>
               <th>Body</th>
@@ -115,7 +116,8 @@ export default function OversightDashboard() {
             <tr><td>ANSPDCP</td><td>High-risk processing notifications</td><td>Operational data</td></tr>
             <tr><td>Ombudsman</td><td>Complaints → trigger IG reviews</td><td>Direct case access</td></tr>
           </tbody>
-        </table>
+          </table>
+        </div>
       </section>
     </div>
   )

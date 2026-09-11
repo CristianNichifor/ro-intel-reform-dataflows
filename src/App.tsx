@@ -6,6 +6,7 @@ import OversightDashboard from './components/OversightDashboard'
 import RedTeamScenario from './components/RedTeamScenario'
 import { currentActors, targetActors } from './data/actors'
 import { currentFlows, targetFlows } from './data/flows'
+import GlossedText from './components/GlossedText'
 import type { GraphMode } from './lib/graph'
 import { seedLedger } from './lib/ledger'
 
@@ -49,16 +50,11 @@ function Overview() {
         <p className="section-label">Mission</p>
         <h2>Romanian Intelligence Reform — Data-Flow Architecture</h2>
         <p>
-          Interactive demo of the <strong>current</strong> and <strong>target-state</strong>{' '}
-          information data flows between Romania&apos;s intelligence, oversight, judicial and
-          civilian institutions — built as a technical companion to the reform blueprint for
-          public debate.
+          <GlossedText text="Interactive demo of the current and target-state information data flows between Romania's intelligence, oversight, judicial and civilian institutions — built as a technical companion to the reform blueprint for public debate." />
         </p>
         <p className="muted">
-          Everything runs in the browser. Warrant tokens use a mock HMAC-SHA-256 signature as a
-          stand-in for the spec&apos;s Ed25519, and the audit ledger is a real append-only
-          hash-chain (SHA-256, verifiable on the Oversight tab). The full specification lives in{' '}
-          <code>docs/</code>.
+          <GlossedText text="Everything runs in the browser. Warrant tokens use a mock HMAC-SHA-256 signature as a stand-in for the spec's Ed25519, and the audit ledger is a real append-only hash chain, verifiable on the Oversight tab." />{' '}
+          The full specification lives in <code>docs/</code>.
         </p>
       </section>
 
@@ -88,16 +84,21 @@ function Overview() {
       <section className="card">
         <p className="section-label">Principles</p>
         <h3>Design principles</h3>
-        <table className="kv-table wide">
-          <thead>
-            <tr><th>Principle</th><th>Implication for data flows</th></tr>
-          </thead>
-          <tbody>
-            {PRINCIPLES.map(([principle, implication]) => (
-              <tr key={principle}><td><strong>{principle}</strong></td><td>{implication}</td></tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="table-scroll">
+          <table className="kv-table wide">
+            <thead>
+              <tr><th>Principle</th><th>Implication for data flows</th></tr>
+            </thead>
+            <tbody>
+              {PRINCIPLES.map(([principle, implication]) => (
+                <tr key={principle}>
+                  <td><strong><GlossedText text={principle} /></strong></td>
+                  <td><GlossedText text={implication} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <div className="dash-grid">
@@ -105,22 +106,22 @@ function Overview() {
           <p className="section-label">Baseline</p>
           <h3>Current state (pre-reform)</h3>
           <ul className="plain-list">
-            <li>SRI receives, stores and correlates data without a unified warrant ledger</li>
-            <li>CSAT coordinates with limited transparency</li>
-            <li>Parliament receives filtered briefings, not verifiable data</li>
-            <li>Prosecutors receive referrals, not traceable evidence chains</li>
-            <li>No independent audit trail linking data to a legal predicate</li>
+            <li><GlossedText text="SRI receives, stores and correlates data without a unified warrant ledger" /></li>
+            <li><GlossedText text="CSAT coordinates with limited transparency" /></li>
+            <li><GlossedText text="Parliament receives filtered briefings, not verifiable data" /></li>
+            <li><GlossedText text="Prosecutors receive referrals, not traceable evidence chains" /></li>
+            <li><GlossedText text="No independent audit trail linking data to a legal predicate" /></li>
           </ul>
         </section>
         <section className="card">
           <p className="section-label">Reform</p>
           <h3>Target state (post-reform)</h3>
           <ul className="plain-list">
-            <li>Hub-and-spoke: agency case vaults around a stateless IADE broker</li>
-            <li>SSC warrant tokens gate every content transfer</li>
-            <li>Append-only, cryptographically verifiable audit ledger</li>
-            <li>IG / JPC / ITAP oversight without operational access</li>
-            <li>DNSC handles civilian cyber defense, separated from intelligence</li>
+            <li><GlossedText text="Hub-and-spoke: agency case vaults around a stateless IADE broker" /></li>
+            <li><GlossedText text="SSC warrant tokens gate every content transfer" /></li>
+            <li><GlossedText text="Append-only, cryptographically verifiable audit ledger" /></li>
+            <li><GlossedText text="IG / JPC / ITAP oversight without operational access" /></li>
+            <li><GlossedText text="DNSC handles civilian cyber defense, separated from intelligence" /></li>
           </ul>
         </section>
       </div>

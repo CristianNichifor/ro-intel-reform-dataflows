@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { appendLedger, getLedgerEntries } from '../lib/ledger'
 import { shortHash } from '../lib/crypto'
 import { sscReview, type RequestObject, type WarrantToken } from '../lib/warrant'
+import GlossedText from './GlossedText'
 
 interface Artifact {
   label: string
@@ -175,13 +176,13 @@ export default function HandshakeSim() {
             STEP {String(Math.min(stepIndex + 1, STEPS.length)).padStart(2, '0')}/{String(STEPS.length).padStart(2, '0')}
           </span>
           <button className="btn" onClick={next} disabled={done || running}>
-            Next step
+            <span aria-hidden>▶</span> Next step
           </button>
           <button className="btn" onClick={autoRun} disabled={done && !running}>
-            {running ? 'Stop' : 'Auto run'}
+            <span aria-hidden>{running ? '■' : '▶▶'}</span> {running ? 'Stop' : 'Auto run'}
           </button>
           <button className="btn btn-ghost" onClick={reset}>
-            Reset
+            <span aria-hidden>↺</span> Reset
           </button>
         </div>
       </div>
@@ -198,9 +199,14 @@ export default function HandshakeSim() {
               }
             >
               <div className="timeline-actor">{step.actor}</div>
-              <div className="timeline-title">{step.title}</div>
-              {index < stepIndex && <div className="timeline-detail">{step.detail}</div>}
-              {index === stepIndex && <div className="timeline-detail">{step.detail}</div>}
+              <div className="timeline-title">
+                <GlossedText text={step.title} />
+              </div>
+              {index <= stepIndex && (
+                <div className="timeline-detail">
+                  <GlossedText text={step.detail} />
+                </div>
+              )}
             </li>
           ))}
         </ol>
@@ -211,9 +217,7 @@ export default function HandshakeSim() {
             {!artifact && <p className="muted">Run the handshake to see request objects, warrant tokens and audit queries.</p>}
           </div>
           <div className="sim-note">
-            <strong>Why this matters:</strong> content moves only with a warrant token; the broker
-            sees metadata only; every hop lands on the immutable audit ledger; oversight bodies
-            query the ledger without touching raw content.
+            <GlossedText text="Why this matters: content moves only with a warrant token; the broker sees metadata only; every hop lands on the immutable audit ledger; oversight bodies query the ledger without touching raw content." />
           </div>
         </div>
       </div>

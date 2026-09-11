@@ -28,7 +28,8 @@ export default function LedgerViewer() {
       </div>
       {ledger.length === 0 && <p className="muted">The ledger is empty. Run the handshake or red-team scenario.</p>}
       {ledger.length > 0 && (
-        <table className="ledger-table">
+        <div className="table-scroll">
+          <table className="ledger-table">
           <thead>
             <tr>
               <th>#</th>
@@ -60,6 +61,7 @@ export default function LedgerViewer() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   )

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { appendLedger, getLedgerEntries } from '../lib/ledger'
 import { sscReview, type RequestObject } from '../lib/warrant'
+import GlossedText from './GlossedText'
 
 interface Artifact {
   label: string
@@ -137,13 +138,13 @@ export default function RedTeamScenario() {
             STEP {String(Math.min(stepIndex + 1, STEPS.length)).padStart(2, '0')}/{String(STEPS.length).padStart(2, '0')}
           </span>
           <button className="btn" onClick={next} disabled={done || running}>
-            Next step
+            <span aria-hidden>▶</span> Next step
           </button>
           <button className="btn" onClick={autoRun} disabled={done && !running}>
-            {running ? 'Stop' : 'Auto run'}
+            <span aria-hidden>{running ? '■' : '▶▶'}</span> {running ? 'Stop' : 'Auto run'}
           </button>
           <button className="btn btn-ghost" onClick={reset}>
-            Reset
+            <span aria-hidden>↺</span> Reset
           </button>
         </div>
       </div>
@@ -172,8 +173,14 @@ export default function RedTeamScenario() {
               }
             >
               <div className="timeline-actor">{step.actor}</div>
-              <div className="timeline-title">{step.title}</div>
-              {index <= stepIndex && <div className="timeline-detail">{step.detail}</div>}
+              <div className="timeline-title">
+                <GlossedText text={step.title} />
+              </div>
+              {index <= stepIndex && (
+                <div className="timeline-detail">
+                  <GlossedText text={step.detail} />
+                </div>
+              )}
             </li>
           ))}
         </ol>
@@ -184,9 +191,7 @@ export default function RedTeamScenario() {
             {!artifact && <p className="muted">Walk through the attack to see how the architecture blocks it.</p>}
           </div>
           <div className="sim-note">
-            <strong>Design claim tested:</strong> the double-check (SSC predicate + specificity
-            validation) plus token enforcement at the broker makes a mass query fail twice — at the
-            judicial gate and at the transport layer — while leaving an audit trail.
+            <GlossedText text="Design claim tested: the double-check (SSC predicate + specificity validation) plus token enforcement at the broker makes a mass query fail twice — at the judicial gate and at the transport layer — while leaving an audit trail." />
           </div>
         </div>
       </div>
