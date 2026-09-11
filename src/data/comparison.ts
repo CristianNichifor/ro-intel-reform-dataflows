@@ -89,6 +89,21 @@ export const institutionComparison: InstitutionRow[] = [
     },
   },
   {
+    id: 'SPP',
+    full: {
+      en: 'Protection and Guard Service',
+      ro: 'Serviciul de Protecție și Pază',
+    },
+    today: {
+      en: 'Under presidential authority; checked only by the weak defence committees — no dedicated committee, no subpoena, unwarranted protection records (C11–C13).',
+      ro: 'Sub autoritate prezidențială; controlat doar de comisiile de apărare, slabe — fără comisie dedicată, fără subpoena, registre de protecție fără mandat (C11–C13).',
+    },
+    proposal: {
+      en: 'Joins the warrant regime (W3), IG full audit access (T20), ANSPDCP notifications (T21) and JPC subpoena (T18c); the direct presidential channel is closed.',
+      ro: 'Intră în regimul de mandate (W3), acces complet IG la audit (T20), notificări ANSPDCP (T21) și subpoena JPC (T18c); canalul direct către Președinție este închis.',
+    },
+  },
+  {
     id: 'DIICOT',
     full: { en: 'DIICOT / PICCJ — Prosecution', ro: 'DIICOT / PICCJ — Procurori' },
     today: {
@@ -206,8 +221,8 @@ export const swotComparison: SwotRow[] = [
   {
     key: 'weaknesses',
     current: {
-      en: 'Concentrated, unaudited data power in military agencies; ad-hoc sharing without case-level traceability; oversight sees filtered summaries, not verifiable data; no independent audit trail; prosecutors get referrals without chain-of-custody.',
-      ro: 'Putere de date concentrată, neauditată, în agenții militare; partajare ad-hoc fără trasabilitate la nivel de caz; supravegherea vede rezumate filtrate, nu date verificabile; fără pistă de audit independentă; procurorii primesc sesizări fără lanț de custodie.',
+      en: 'Concentrated, unaudited data power in military agencies; ad-hoc sharing without case-level traceability; oversight sees filtered summaries, not verifiable data; no independent audit trail; prosecutors get referrals without chain-of-custody; SPP answers only to the weak defence committees — the thinnest oversight of all.',
+      ro: 'Putere de date concentrată, neauditată, în agenții militare; partajare ad-hoc fără trasabilitate la nivel de caz; supravegherea vede rezumate filtrate, nu date verificabile; fără pistă de audit independentă; procurorii primesc sesizări fără lanț de custodie; SPP răspunde doar comisiilor de apărare, slabe — cel mai subțire control dintre toate.',
     },
     proposal: {
       en: 'New institutions (SSC, IADE, IG, ITAP) must be built from scratch with no local precedent; depends on disciplined cryptographic key management; needs primary legislation and sustained funding; sharing is slower than today’s ad-hoc speed.',

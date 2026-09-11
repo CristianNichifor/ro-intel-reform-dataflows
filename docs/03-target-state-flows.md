@@ -30,7 +30,11 @@ Instead of a central mass database, the target state uses:
 | T15 | SRI/SIE | CSAT | Strategic threat assessments | Aggregated, no raw data | Yes | IG (existence only) |
 | T16 | CSAT | Presidency | Strategic summaries | Aggregated | Yes | IG (existence only) |
 | T17 | Ombudsman | IG | Complaints triggering review | Statutory | Yes | IG, JPC (anonymized) |
-| T18 | JPC | SRI/SIE | Subpoena for specific files | Parliamentary subpoena power | Yes | Public (existence of subpoena) |
+| T18 | JPC | SRI/SIE/SPP | Subpoena for specific files | Parliamentary subpoena power | Yes | Public (existence of subpoena) |
+| T19 | SPP collection | SPP case vault | Protection intelligence | Internal + SSC warrant (if surveillance) | Yes (warrant ID) | IG, ITAP |
+| T20 | SPP | IG | Audit logs + system metadata | Statutory right of access | Yes | IG internal |
+| T21 | SPP | ANSPDCP | High-risk processing notifications | GDPR + intelligence law | Yes | ANSPDCP |
+| W3 | SSC | SPP | Cryptographic warrant token | SSC issue/deny decision | Yes | IG, ITAP |
 
 ## 3.3 Legend
 

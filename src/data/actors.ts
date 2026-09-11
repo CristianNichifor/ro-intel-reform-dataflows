@@ -51,6 +51,19 @@ export const currentActors: Actor[] = [
     },
   },
   {
+    id: 'SPP',
+    name: { en: 'SPP', ro: 'SPP' },
+    role: {
+      en: 'Protection & Guard Service',
+      ro: 'Serviciul de Protecție și Pază',
+    },
+    category: 'agency',
+    note: {
+      en: 'Under presidential authority; checked only by the weak parliamentary defence committees',
+      ro: 'Sub autoritate prezidențială; controlat doar de comisiile parlamentare de apărare, slabe',
+    },
+  },
+  {
     id: 'DIICOT',
     name: { en: 'DIICOT / PICCJ', ro: 'DIICOT / PICCJ' },
     role: { en: 'Prosecutors', ro: 'Procurori' },
@@ -163,6 +176,19 @@ export const targetActors: Actor[] = [
     note: {
       en: 'Issues/denies warrant tokens; holds warrant registry',
       ro: 'Emite/respinge tokenuri de mandat; deține registrul mandatelor',
+    },
+  },
+  {
+    id: 'SPP',
+    name: { en: 'SPP (reformed)', ro: 'SPP (reformat)' },
+    role: {
+      en: 'Protection & Guard · case vault',
+      ro: 'Protecție și pază · vault de caz',
+    },
+    category: 'agency',
+    note: {
+      en: 'Protection intelligence under SSC warrants; IG audit access closes the oversight gap',
+      ro: 'Informațiile de protecție sub mandate SSC; accesul IG la audit închide golul de supraveghere',
     },
   },
   {

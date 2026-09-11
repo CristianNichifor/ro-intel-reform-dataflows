@@ -14,6 +14,9 @@
 | C8 | SRI → ANSPDCP | Notificări | Descrieri de procesare | GDPR / Legea 190/2018 | Scăzută | Abuz de excepția pentru serviciile de informații |
 | C9 | SIE → Președinție | Informări | Evaluări externe | Intern | Foarte scăzută | Fără vizibilitate parlamentară |
 | C10 | SRI/SIE → Presă/public | Operațiuni de dezinformare | Narative | N/A | Nicio | Fără atribuire sau audit |
+| C11 | Colectare SPP | Baza internă SPP | Jurnale de acces, dosare ale persoanelor protejate | Autorizare internă | Foarte scăzută | Stocare fără mandat; cel mai slab control dintre toate serviciile |
+| C12 | SPP → Președinție | Rapoarte operaționale | Informații de protecție | Legea 191/1998 (autoritate prezidențială) | Scăzută | Lanț prezidențial fără verificare independentă |
+| C13 | SPP → Comisiile de apărare | Rapoarte | Rezumate filtrate | Legea 191/1998 (control parlamentar) | Foarte scăzută | Cel mai slab control: fără comisie dedicată, fără subpoena |
 
 ## 2.2 Legendă
 

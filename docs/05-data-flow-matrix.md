@@ -19,4 +19,8 @@
 | T15 | SRI/SIE | Internal | — | CSAT | IADE ledger | IG (existence) |
 | T16 | CSAT | Internal | — | Presidency | IADE ledger | IG (existence) |
 | T17 | Ombudsman | Statutory | — | IG | IG internal | JPC (anonymized) |
-| T18 | JPC | Subpoena | — | SRI/SIE | IADE ledger | Public (existence) |
+| T18 | JPC | Subpoena | — | SRI/SIE/SPP | IADE ledger | Public (existence) |
+| T19 | SPP collector | SPP internal + SSC | — | SPP vault | IADE ledger | IG, ITAP |
+| T20 | SPP | Statutory | — | IG | IG internal | JPC |
+| T21 | SPP | GDPR | — | ANSPDCP | ANSPDCP | Public (annual) |
+| W3 | SSC | SSC | — | SPP | IADE ledger | IG, ITAP |

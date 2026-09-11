@@ -30,7 +30,11 @@
 | T15 | SRI/SIE | CSAT | Evaluări strategice de amenințare | Agregat, fără date brute | Da | IG (doar existența) |
 | T16 | CSAT | Președinție | Rezumate strategice | Agregat | Da | IG (doar existența) |
 | T17 | Avocatul Poporului | IG | Plângeri care declanșează verificări | Statutar | Da | IG, JPC (anonimizat) |
-| T18 | JPC | SRI/SIE | Subpoena pentru fișiere specifice | Puterea parlamentară de subpoena | Da | Public (existența subpoenei) |
+| T18 | JPC | SRI/SIE/SPP | Subpoena pentru fișiere specifice | Puterea parlamentară de subpoena | Da | Public (existența subpoenei) |
+| T19 | Colectare SPP | Vault de caz SPP | Informații de protecție | Intern + mandat SSC (dacă e supraveghere) | Da (ID mandat) | IG, ITAP |
+| T20 | SPP | IG | Jurnale de audit + metadate de sistem | Drept legal de acces | Da | Intern IG |
+| T21 | SPP | ANSPDCP | Notificări de procesare cu risc ridicat | GDPR + legea serviciilor | Da | ANSPDCP |
+| W3 | SSC | SPP | Token criptografic de mandat | Decizie SSC emitere/respingere | Da | IG, ITAP |
 
 ## 3.3 Legendă
 

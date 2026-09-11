@@ -14,6 +14,9 @@
 | C8 | SRI → ANSPDCP | Notifications | Processing descriptions | GDPR / Law 190/2018 | Low | Intelligence exemption overuse |
 | C9 | SIE → Presidency | Briefings | Foreign assessments | Internal | Very low | No parliamentary visibility |
 | C10 | SRI/SIE → Media/public | Disinformation ops | Narratives | N/A | None | No attribution or audit |
+| C11 | SPP collection | SPP internal database | Visitor logs, protected-person files | Internal authorization | Very low | Unwarranted storage; weakest oversight of all services |
+| C12 | SPP → Presidency | Operational reports | Protection intelligence | Law 191/1998 (presidential authority) | Low | Presidential chain with no independent check |
+| C13 | SPP → Defence committees | Reports | Filtered summaries | Law 191/1998 (parliamentary control) | Very low | Weakest oversight: no dedicated committee, no subpoena |
 
 ## 2.2 Legend
 

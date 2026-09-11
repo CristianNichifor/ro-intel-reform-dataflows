@@ -9,6 +9,7 @@ export type GraphMode = 'current' | 'target'
 const CURRENT_POSITIONS: Record<string, XYPosition> = {
   PRES: { x: 440, y: 0 },
   CSAT: { x: 180, y: 0 },
+  SPP: { x: 660, y: 0 },
   STS: { x: 20, y: 170 },
   SRI: { x: 330, y: 170 },
   SIE: { x: 640, y: 170 },
@@ -24,6 +25,8 @@ const CURRENT_POSITIONS: Record<string, XYPosition> = {
 // Bowtie layout: SRI/SIE hubs on the left/right, shared counterparts stacked in a
 // central column. Handles are chosen per edge so fan edges stay in the side
 // corridors and reverse pairs run on separate sides (see TARGET_HANDLES).
+// SPP sits at the bottom of the column, adjacent to the oversight cluster;
+// its long edges to SSC/ANSPDCP curve around the column (T21, W3).
 const TARGET_POSITIONS: Record<string, XYPosition> = {
   CSAT: { x: 520, y: 0 },
   DIICOT: { x: 520, y: 160 },
@@ -32,12 +35,13 @@ const TARGET_POSITIONS: Record<string, XYPosition> = {
   SSC: { x: 520, y: 640 },
   IADE: { x: 520, y: 800 },
   IG: { x: 520, y: 960 },
+  SPP: { x: 520, y: 1120 },
   SRI: { x: 200, y: 800 },
   SIE: { x: 840, y: 800 },
   PRES: { x: 760, y: 0 },
   ICCJ: { x: 760, y: 160 },
-  JPC: { x: 520, y: 1120 },
-  ITAP: { x: 60, y: 1120 },
+  JPC: { x: 520, y: 1280 },
+  ITAP: { x: 60, y: 1280 },
   OMB: { x: 60, y: 960 },
 }
 
@@ -58,7 +62,7 @@ const TARGET_HANDLES: Record<string, [HandleSide, HandleSide]> = {
   T11: ['right', 'left'],
   T11b: ['left', 'right'],
   T11c: ['bottom', 'top'],
-  T12: ['bottom', 'top'],
+  T12: ['left', 'left'],
   T13: ['right', 'left'],
   T14: ['right', 'left'],
   T14b: ['left', 'right'],
@@ -70,6 +74,10 @@ const TARGET_HANDLES: Record<string, [HandleSide, HandleSide]> = {
   T18b: ['right', 'bottom'],
   W1: ['left', 'right'],
   W2: ['right', 'left'],
+  W3: ['right', 'right'],
+  T20: ['top', 'bottom'],
+  T21: ['left', 'left'],
+  T18c: ['top', 'bottom'],
 }
 
 interface EdgeRouting {

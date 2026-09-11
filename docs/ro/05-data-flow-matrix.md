@@ -19,4 +19,8 @@
 | T15 | SRI/SIE | Intern | — | CSAT | Registru IADE | IG (existența) |
 | T16 | CSAT | Intern | — | Președinție | Registru IADE | IG (existența) |
 | T17 | Avocatul Poporului | Statutar | — | IG | Intern IG | JPC (anonimizat) |
-| T18 | JPC | Subpoena | — | SRI/SIE | Registru IADE | Public (existența) |
+| T18 | JPC | Subpoena | — | SRI/SIE/SPP | Registru IADE | Public (existența) |
+| T19 | Colector SPP | Intern SPP + SSC | — | Vault SPP | Registru IADE | IG, ITAP |
+| T20 | SPP | Statutar | — | IG | Intern IG | JPC |
+| T21 | SPP | GDPR | — | ANSPDCP | ANSPDCP | Public (anual) |
+| W3 | SSC | SSC | — | SPP | Registru IADE | IG, ITAP |

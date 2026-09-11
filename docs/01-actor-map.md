@@ -12,8 +12,10 @@
             ▼              ▼              ▼
 ┌─────────────┐  ┌─────────────┐  ┌───────────────────┐
 │ SRI         │  │ SIE         │  │ STS (Telecom/IT)  │
-│ (domestic)  │  │ (foreign)   │  │ + other services  │
-│ military    │  │ military    │  │ (SGP, SPP, DGPI)  │
+│ (domestic)  │  │ (foreign)   │  │ SPP (protection & │
+│ military    │  │ military    │  │ guard, under the  │
+│             │  │             │  │ President) + other │
+│             │  │             │  │ (SGP, DGPI)       │
 └──────┬──────┘  └──────┬──────┘  └─────────┬─────────┘
        │                │                  │
        └───────┬────────┴────────┬─────────┘
@@ -33,6 +35,7 @@
 **Current-state flow pathologies:**
 
 - SRI can receive, store, and correlate data from multiple sources without a unified warrant ledger.
+- SPP (protection and guard) sits under presidential authority and answers only to the weak parliamentary defence committees — the thinnest oversight of any service.
 - CSAT acts as a coordination node with limited transparency.
 - Parliamentary committee receives *filtered* briefings, not verifiable data.
 - Prosecutors receive *referrals*, not traceable evidence chains.
@@ -44,6 +47,7 @@
 | --- | --- | --- |
 | **SRI** (civilianized) | Domestic intelligence agency | Source of domestic intel; holds its own case files |
 | **SIE** (civilianized) | Foreign intelligence agency | Source of foreign intel; holds its own case files |
+| **SPP** (reformed) | Protection & Guard service | Protection intelligence in its own case vault; SSC warrants; IG audit access |
 | **DNSC** | Civilian cyber defense | National cyber incident response; receives threat indicators |
 | **Specialized Surveillance Court (SSC)** | Judicial | Issues/denies warrant tokens; holds warrant registry |
 | **Inspector General (IG)** | Independent statutory oversight | Full audit-log access; no raw content unless warranted |

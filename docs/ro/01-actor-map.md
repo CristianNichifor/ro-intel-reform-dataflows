@@ -12,8 +12,10 @@
             ▼              ▼              ▼
 ┌─────────────┐  ┌─────────────┐  ┌───────────────────┐
 │ SRI         │  │ SIE         │  │ STS (Telecom/IT)  │
-│ (intern)    │  │ (extern)    │  │ + alte servicii   │
-│ militar     │  │ militar     │  │ (SGP, SPP, DGPI)  │
+│ (intern)    │  │ (extern)    │  │ SPP (protecție și │
+│ militar     │  │ militar     │  │ pază, sub Preșe-  │
+│             │  │             │  │ dinte) + (SGP,    │
+│             │  │             │  │ DGPI)             │
 └──────┬──────┘  └──────┬──────┘  └─────────┬─────────┘
        │                │                  │
        └───────┬────────┴────────┬─────────┘
@@ -33,6 +35,7 @@
 **Patologiile fluxurilor din starea actuală:**
 
 - SRI poate primi, stoca și corela date din mai multe surse fără un registru unic de mandate.
+- SPP (protecție și pază) se află sub autoritate prezidențială și răspunde doar comisiilor parlamentare de apărare, slabe — cel mai subțire control dintre toate serviciile.
 - CSAT acționează ca nod de coordonare cu transparență limitată.
 - Comisia parlamentară primește informări *filtrate*, nu date verificabile.
 - Procurorii primesc *sesizări*, nu lanțuri de probe trasabile.
@@ -44,6 +47,7 @@
 | --- | --- | --- |
 | **SRI** (civilianizat) | Agenție de informații interne | Sursă de informații interne; deține propriile dosare de caz |
 | **SIE** (civilianizat) | Agenție de informații externe | Sursă de informații externe; deține propriile dosare de caz |
+| **SPP** (reformat) | Serviciul de Protecție și Pază | Informații de protecție în propriul vault de caz; mandate SSC; acces IG la audit |
 | **DNSC** | Apărare cibernetică civilă | Răspuns național la incidente cibernetice; primește indicatori de amenințare |
 | **Curtea de Supraveghere Specializată (SSC)** | Judiciar | Emite/respinge tokenuri de mandat; deține registrul mandatelor |
 | **Inspector General (IG)** | Supraveghere statutară independentă | Acces complet la jurnalele de audit; fără conținut brut decât cu mandat |
