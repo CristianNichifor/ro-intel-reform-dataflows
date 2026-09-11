@@ -6,6 +6,8 @@ to the Romanian Intelligence Reform Policy Blueprint.
 
 > Everything in this repo is a simulation. No real data, no real systems.
 
+[Romanian README](README.ro.md) · [Docs in Romanian](docs/ro/) · The app UI itself is bilingual (EN/RO).
+
 ## What's inside
 
 | Tab | What it shows |
@@ -49,6 +51,7 @@ ro-intel-reform-dataflows/
 │   ├── 04-flow-specifications.md
 │   ├── 05-data-flow-matrix.md
 │   └── 06-glossary.md
+├── docs/ro/                    # the same sections in Romanian
 ├── schemas/                    # JSON Schemas for the core objects
 │   ├── warrant-token.schema.json
 │   ├── request-object.schema.json
@@ -56,7 +59,8 @@ ro-intel-reform-dataflows/
 │   ├── audit-ledger-entry.schema.json
 │   └── indicator-sharing.schema.json
 └── src/
-    ├── data/                   # actors + flow tables (C1–C10, T1–T18)
+    ├── data/                   # actors + flow tables (C1–C10, T1–T18), bilingual
+    ├── i18n/                   # EN/RO dictionaries + language context
     ├── lib/                    # graph builder, warrant logic, crypto, ledger store
     └── components/             # explorer, sims, dashboard, ledger viewer
 ```
