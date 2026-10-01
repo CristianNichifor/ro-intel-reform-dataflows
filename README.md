@@ -38,10 +38,11 @@ checks them.
 ## Quick start
 
 ```bash
-npm install
+npm ci
 npm run dev      # dev server
 npm run build    # typecheck + production build
 npm run lint     # oxlint
+# Full contributor gate: see CONTRIBUTING.md
 ```
 
 ## How it works
